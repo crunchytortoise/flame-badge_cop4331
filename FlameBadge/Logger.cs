@@ -61,12 +61,13 @@ namespace FlameBadge
                 using (StreamWriter w = File.AppendText(log_file))
                 {
                     String date = DateTime.Now.ToString("MMM dd HH:mm:ss");
-                    String msg = String.Format(date + "  [{0}] : {1}", message_type, message);
+                    String msg = String.Format(date + @"  [{0}] : {1}", message_type, message);
                     w.WriteLine(msg);
                 }
             }
             catch (Exception e)
             {
+                Logger.log(e.ToString(), "warning");
                 return false;
             }
 

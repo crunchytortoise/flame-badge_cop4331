@@ -22,6 +22,8 @@ namespace FlameBadge
         private static String project_conf = String.Format(@"{0}\{1}.conf", project_path, project_name);
 
         public static Boolean DEBUG = false;
+        public static Int16 NUM_PLAYER = 6;
+        public static Int16 NUM_CPU = 6;
 
         private Boolean _parseConfig()
         {

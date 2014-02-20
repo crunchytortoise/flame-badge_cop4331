@@ -58,12 +58,14 @@
   <ItemGroup>
     <Compile Include="Character.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="EnemyCharacter.cs" />
     <Compile Include="FlameBadge.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sidebar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

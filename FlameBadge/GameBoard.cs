@@ -33,7 +33,7 @@ namespace FlameBadge
             
             // board should never change, so overlay is a copy that will have the characters as well
             // this way we know what terrain was at a certain spot before when a character leaves it
-            overlay = board;
+            overlay = (Char[,])board.Clone();
             redraw();
         }
 
@@ -48,7 +48,7 @@ namespace FlameBadge
         private Boolean _parseMap(String map, Int16 map_size)
         {
             board = new Char[map_size, map_size];
-            Logger.log("Initializing map...");
+            Logger.log(@"Initializing map...");
             
             try {
                 using (StreamReader f = new StreamReader(map))
@@ -72,7 +72,7 @@ namespace FlameBadge
                 return false;
             }
 
-            Logger.log("Map initialized succesfully!");
+            Logger.log(@"Map initialized succesfully!");
             return true;
         }
 
@@ -82,7 +82,8 @@ namespace FlameBadge
          /// <returns> true on success</returns>
         public static Boolean redraw()
         {
-            Logger.log("Redrawing map...");
+            Logger.log(@"Redrawing map...");
+            Console.Clear();
 
             for(int i = 0; i < overlay.GetLength(0); i++)
             {
@@ -92,15 +93,65 @@ namespace FlameBadge
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
-            Console.Read();
             return true;
         }
 
-        public static void update(Character character, Int16 newX, Int16 newY)
+        /// <summary>
+        /// Moves a unit on the game board and redraws to show updated
+        /// positions.
+        /// </summary>
+        /// <param name="character">ID of the piece, so we know how to redraw.</param>
+        /// <param name="newX">new x-coordinate position of the piece</param>
+        /// <param name="newY">new y-coordinate position of the piece</param>
+        /// <returns>true if the update happened, false otherwise</returns>
+        public static Boolean update(Character character, Int16 newX, Int16 newY)
         {
-            overlay[character.xPos, character.yPos] = board[character.xPos, character.yPos];
-            overlay[newX, newY] = character.id;
-            redraw();
+            if (isValidMove(newX, newY))
+            {
+                Logger.log(@"Valid move detected, attempting to reassign position.", "debug");
+                overlay[character.yPos, character.xPos] = board[character.yPos, character.xPos];
+                overlay[newY, newX] = character.id;
+                character.xPos = newX;
+                character.yPos = newY;
+                Logger.log(@"Reassignment successful, map should redraw.", "debug");
+
+                redraw();
+                return true;
+            }
+            else
+            {
+                Logger.log(String.Format(@"Invalid move detected. Tried to place at {0}, {1}", newX, newY), "warning");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Detects whether a proposed move is going to go out of bounds or not.
+        /// </summary>
+        /// <param name="x">x-coordinate number of proposed move</param>
+        /// <param name="y">y-coordinate number of proposed move</param>
+        /// <returns>true if the move is valid, false otherwise</returns>
+        protected static Boolean isValidMove(Int16 x, Int16 y)
+        {
+            if(x >= 0 && x <= overlay.GetLength(0) - 1
+                && y >= 0 && y <= overlay.GetLength(1) - 1)
+                if(!isOccupied(x, y))
+                    return true;
+                else
+                    return false;
+            else return false;
+
+        }
+
+        public static Boolean isOccupied(Int32 x, Int32 y)
+        {
+            if (overlay[y, x].Equals('.'))
+                return false;
+            else
+            {
+                Logger.log(String.Format(@"Ran into occupied space at {0}, {1}, retrying...", x, y));
+                return true;
+            }
         }
     }
 }

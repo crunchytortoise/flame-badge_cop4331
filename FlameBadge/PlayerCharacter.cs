@@ -14,52 +14,37 @@ namespace FlameBadge
 {
     class PlayerCharacter : Character
     {
-        /// <summary>
-        /// Moves the player character up one space.
-        /// </summary>
-        public override void moveUp()
-        {
-            if (yPos < GameBoard.overlay.GetLength(1) - 1)
-            {
-                Logger.log(String.Format("Moving {0} up one space...", this.id), "debug");
-                GameBoard.update(this, xPos, (short)(yPos + 1));
-            }
+        public PlayerCharacter(Char id, Int16 x, Int16 y) : base(id, x, y) {}
 
-        }
-
-        /// <summary>
-        /// Moves the player character down one space.
-        /// </summary>
-        public override void moveDown()
+        public static Tuple<Int16, Int16> getStartingPosition()
         {
-            if (yPos > 0)
+            Random rand = new Random();
+
+            while (true)
             {
-                Logger.log(String.Format("Moving {0} down one space...", this.id), "debug");
-                GameBoard.update(this, xPos, (short)(yPos - 1));
+                Int32 y = rand.Next(GameBoard.overlay.GetLength(1) - 3, GameBoard.overlay.GetLength(1));
+                Int32 x = rand.Next(0, GameBoard.overlay.GetLength(0));
+
+                if (GameBoard.isOccupied(x, y))
+                    continue;
+                else
+                    return Tuple.Create((short)x, (short)y);
             }
         }
 
-        /// <summary>
-        /// Moves the player character left one space.
-        /// </summary>
-        public override void moveLeft()
+        public override void takeTurn()
         {
-            if (xPos > 0)
-            {
-                Logger.log(String.Format("Moving {0} left one space...", this.id), "debug");
-                GameBoard.update(this, (short)(xPos - 1), yPos);
-            }
-        }
+            Sidebar.announce(String.Format(@"{0} taking turn...", this.id.ToString()), true);
 
-        /// <summary>
-        /// Moves the player character right one space.
-        /// </summary>
-        public override void moveRight()
-        {
-            if (xPos < GameBoard.overlay.GetLength(0) - 1)
+            ConsoleKeyInfo cmd;
+            while (true)
             {
-                Logger.log(String.Format("Moving {0} right one space...", this.id), "debug");
-                GameBoard.update(this, (short)(xPos + 1), yPos);
+                cmd = Console.ReadKey();
+
+                if (makeMove(cmd.KeyChar))
+                    break;
+                else
+                    Sidebar.announce(String.Format(@"Invalid move, try again {0}.", this.id.ToString()), true);
             }
         }
     }
