@@ -24,7 +24,7 @@ namespace FlameBadge
         {
             // TODO: make MAP_SIZE a configurable value
             const Int16 MAP_SIZE = 20;
-            game_map = String.Format(@"{0}\{1}.map", Config.project_path, Config.project_name);
+            game_map = String.Format(@".\{0}.map", Config.project_name);
 
             if(!this._parseMap(game_map, MAP_SIZE))
                 Environment.Exit(1);
