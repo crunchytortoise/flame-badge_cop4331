@@ -16,6 +16,8 @@ namespace FlameBadge
             int origRow = Console.CursorTop;
             int origCol = Console.CursorLeft;
             Console.SetCursorPosition(left, top);
+            Console.Write(new String(' ', 30));
+            Console.SetCursorPosition(left, top);
             Console.Write(msg);
 
             if (printKey)
