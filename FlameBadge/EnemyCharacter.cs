@@ -28,7 +28,7 @@ namespace FlameBadge
 
         public override void takeTurn()
         {
-            Sidebar.announce(String.Format(@"CPU taking turn...", this.id.ToString()), false);
+            /*Sidebar.announce(String.Format(@"CPU taking turn...", this.id.ToString()), false);
 
             Random rand = new Random();
 
@@ -51,7 +51,24 @@ namespace FlameBadge
                    
                     break;
                 }
-            }
+            }*/
+
+            // EXAMPLE AI CODE (AI object should be declared at a higher level though, not for each individual unit).
+            // The 3rd and 4th parameters are base positions. If given with x and y less than 0, the AI assumes no bases exist.
+            // The 5th parameter is the AI level, which controls how far into the future the search goes. The level caps at 5 (because any higher takes forever).
+            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, new Tuple<int, int>(-1, -1), new Tuple<int, int>(-1, -1), 3);
+
+            Tuple<int, int> nextMoveLoc = smartCPU.getNextMove(this);
+            if (nextMoveLoc.Item1 < this.xPos && nextMoveLoc.Item2 > this.yPos) { makeMove('1'); }
+            else if (nextMoveLoc.Item1 == this.xPos && nextMoveLoc.Item2 > this.yPos) { makeMove('2'); }
+            else if (nextMoveLoc.Item1 > this.xPos && nextMoveLoc.Item2 > this.yPos) { makeMove('3'); }
+            else if (nextMoveLoc.Item1 < this.xPos && nextMoveLoc.Item2 == this.yPos) { makeMove('4'); }
+            else if (nextMoveLoc.Item1 > this.xPos && nextMoveLoc.Item2 == this.yPos) { makeMove('6'); }
+            else if (nextMoveLoc.Item1 < this.xPos && nextMoveLoc.Item2 < this.yPos) { makeMove('7'); }
+            else if (nextMoveLoc.Item1 == this.xPos && nextMoveLoc.Item2 < this.yPos) { makeMove('8'); }
+            else if (nextMoveLoc.Item1 > this.xPos && nextMoveLoc.Item2 < this.yPos) { makeMove('9'); }
+            else { Logger.log(String.Format(@"Error getting move for cpu unit {0}", this.id), "Error"); }
+
         }
     }
 }

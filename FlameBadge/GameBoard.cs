@@ -24,7 +24,7 @@ namespace FlameBadge
         {
             // TODO: make MAP_SIZE a configurable value
             const Int16 MAP_SIZE = 20;
-            game_map = String.Format(@".\{0}.map", Config.project_name);
+            game_map = String.Format(@"..\..\{0}.map", Config.project_name);
 
             if(!this._parseMap(game_map, MAP_SIZE))
                 Environment.Exit(1);
@@ -152,6 +152,100 @@ namespace FlameBadge
                 Logger.log(String.Format(@"Ran into occupied space at {0}, {1}, retrying...", x, y));
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Returns all possible moves from the given location
+        /// </summary>
+        /// <param name="x">Location x.</param>
+        /// <param name="y">Location y.</param>
+        /// <param name="moveSpeed">(Optional) Number of spaces the unit can move in one turn. (default is 1)</param>
+        /// <returns>List of x,y positions that are reachable from the location.</returns>
+        public static List<Tuple<int, int>> getPossibleMovesFromLoc(int x, int y, int moveSpeed = 1)
+        {
+            List<Tuple<int, int>> moves = new List<Tuple<int, int>>();
+            if (GameBoard.isValidMove((short) (x - 1),(short) y))
+            {
+                moves.Add(new Tuple<int, int>(x - 1, y));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x - 1, y, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short) (x + 1),(short) y))
+            {
+                moves.Add(new Tuple<int, int>(x + 1, y));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x + 1, y, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short) x, (short) (y - 1)))
+            {
+                moves.Add(new Tuple<int, int>(x, y - 1));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x, y - 1, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short) x, (short) (y + 1)))
+            {
+                moves.Add(new Tuple<int, int>(x, y + 1));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x, y + 1, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short)(x - 1), (short)(y - 1)))
+            {
+                moves.Add(new Tuple<int, int>(x - 1, y - 1));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x - 1, y - 1, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short)(x + 1), (short)(y - 1)))
+            {
+                moves.Add(new Tuple<int, int>(x + 1, y - 1));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x + 1, y - 1, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short)(x - 1), (short)(y + 1)))
+            {
+                moves.Add(new Tuple<int, int>(x - 1, y + 1));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x - 1, y + 1, moveSpeed - 1));
+            }
+            if (GameBoard.isValidMove((short)(x + 1), (short)(y + 1)))
+            {
+                moves.Add(new Tuple<int, int>(x + 1, y + 1));
+                if (moveSpeed > 1)
+                    moves.AddRange(getPossibleMovesFromLoc(x + 1, y + 1, moveSpeed - 1));
+            }
+            return moves;
+        }
+
+        /// <summary>
+        /// Returns units which can be attacked from the given position
+        /// </summary>
+        /// <param name="x">Location x.</param>
+        /// <param name="y">Location y.</param>
+        /// <param name="minAttackDistance">(Optional) Minimum distance of attack in gameboard tiles. (Default is 1)</param>
+        /// <param name="maxAttackDistance">(Optional) Maximum distance of attack in gameboard tiles. (Default is 1)</param>
+        /// <returns>List of units which can be attacked from the given position.</returns>
+        public static List<Character> getAttackableUnits(int x, int y, List<Character> enemies, int maxAttackDistance = 1, int minAttackDistance = 1)
+        {
+            List<Character> victims = new List<Character>();
+            foreach (Character c in enemies)
+            {
+                int dist = distance(c.xPos, c.yPos, x, y);
+                if ((dist >= minAttackDistance) && (dist <= maxAttackDistance))
+                    victims.Add(c);
+            }
+            return victims;
+        }
+
+        /// <summary>
+        /// Returns the integer board tile distance between two points
+        /// </summary>
+        /// <param name="x1">x for location 1.</param>
+        /// <param name="y1">y for location 1.</param>
+        /// <param name="x2">x for location 2.</param>
+        /// <param name="y3">y for location 2.</param>
+        /// <returns>Board tile distance between the two points.</returns>
+        public static int distance(int x1, int y1, int x2, int y2)
+        {
+            return (int)Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
     }
 }

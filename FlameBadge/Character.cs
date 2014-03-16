@@ -132,5 +132,17 @@ namespace FlameBadge
         }
 
         public abstract void takeTurn();
+
+        /// <summary>
+        /// Returns all possible moves for the given unit
+        /// </summary>
+        /// <param name="c">Character unit</param>
+        /// <returns>List of x,y positions that the unit can possibly move to.</returns>
+        /// <remarks>Currenty assumes all units can only move 1 space per move.</remarks>
+        public List<Tuple<int, int>> getPossibleMoves()
+        {
+            return GameBoard.getPossibleMovesFromLoc(xPos, yPos);
+        }
+
     }
 }
