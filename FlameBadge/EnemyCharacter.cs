@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,59 @@ namespace FlameBadge
                 else
                     return Tuple.Create((short)x, (short)y);
             }
+        }
+
+        public static void placePieces(Boolean is_loaded, String loaded_file)
+        {
+            if (!is_loaded)
+            {
+                Logger.log(@"Placing enemy pieces in random positions.");
+                for (int i = 0; i < Config.NUM_CPU; i++)
+                {
+                    Tuple<Int16, Int16> coords = EnemyCharacter.getStartingPosition();
+                    EnemyCharacter character = new EnemyCharacter(EnemyCharacter._toAlpha(i), coords.Item1, coords.Item2);
+                    FlameBadge.cpu_units.Add(character);
+                    GameBoard.update(character, coords.Item1, coords.Item2);
+                }
+            }
+            else
+            {
+                Logger.log(@"Placing computer pieces according to loaded save file.");
+                try
+                {
+                    using (StreamReader sr = new StreamReader(loaded_file))
+                    {
+                        while (sr.Peek() > -1)
+                        {
+                            String line = sr.ReadLine();
+                            if (line.StartsWith("Computer"))
+                            {
+                                for (int i = 0; i < Convert.ToInt16(line.Split()[1]); i++)
+                                {
+                                    String[] unit_info = sr.ReadLine().Split();
+                                    EnemyCharacter character = new EnemyCharacter(Convert.ToChar(unit_info[0]), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
+                                    FlameBadge.cpu_units.Add(character);
+                                    GameBoard.update(character, Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
+                                    Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2])));
+                                }
+                            }
+                        }
+
+
+
+                    }
+                }
+                catch (Exception)
+                {
+                    Logger.log("Could not load computer pieces from save file. Quitting...", "error");
+                    Environment.Exit(1);
+                }
+            }
+        }
+
+        private static Char _toAlpha(int c)
+        {
+            return (Char)(65 + c);
         }
 
         public override void takeTurn()

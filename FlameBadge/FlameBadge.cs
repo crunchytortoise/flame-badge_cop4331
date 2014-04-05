@@ -42,18 +42,33 @@ namespace FlameBadge
             else
                 loaded_file = save_dir + loaded_file;
 
+            // if we loaded we need to know whose turn it was
+            Char curr_turn = '0';
+            if (is_loaded)
+                curr_turn = _getTurn(loaded_file);
+
             // Draw the game board.
             GameBoard game_board = new GameBoard(is_loaded ? loaded_file : null);
 
             // Put the pieces on the board.
-            placePlayerPieces();
-            placeEnemyPieces();
+            PlayerCharacter.placePieces(is_loaded, loaded_file);
+            EnemyCharacter.placePieces(is_loaded, loaded_file);
 
             // mainloop
             while (true)
             {
                 for (int i = 0; i < player_units.Count; i++)
                 {
+                    // if we loaded a game, skip over everyone until the rightful
+                    // unit goes
+                    Sidebar.announce(curr_turn.ToString());
+                    if (curr_turn != '0')
+                    {
+                        if (player_units[i].id != curr_turn)
+                            continue;
+                        else
+                            curr_turn = '0';
+                    }
                     player_units[i].takeTurn();
                     if (FlameBadge.hasEnded)
                         _endGame();
@@ -67,37 +82,6 @@ namespace FlameBadge
                 }
             }
 
-        }
-
-        public void placePlayerPieces()
-        {
-            Logger.log(@"Placing player pieces in random positions.");
-
-            for (int i = 0; i < Config.NUM_PLAYER; i++)
-            {
-                Tuple<Int16, Int16> coords = PlayerCharacter.getStartingPosition();
-                PlayerCharacter character = new PlayerCharacter(Convert.ToChar(i.ToString()), coords.Item1, coords.Item2);
-                player_units.Add(character);
-                GameBoard.update(character, coords.Item1, coords.Item2);
-                Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), coords.Item1, coords.Item2));
-            }
-        }
-
-        public void placeEnemyPieces()
-        {
-            Logger.log(@"Placing enemy pieces in random positions.");
-            for (int i = 0; i < Config.NUM_CPU; i++)
-            {
-                Tuple<Int16, Int16> coords = EnemyCharacter.getStartingPosition();
-                EnemyCharacter character = new EnemyCharacter(_toAlpha(i), coords.Item1, coords.Item2);
-                cpu_units.Add(character);
-                GameBoard.update(character, coords.Item1, coords.Item2);
-            }
-        }
-
-        private Char _toAlpha(int c) 
-        {
-            return (Char)(65 + c);
         }
 
         private void _endGame()
@@ -174,6 +158,36 @@ namespace FlameBadge
                     return dir.GetFiles()[val - 1].Name;
                 }
 
+            }
+        }
+
+        private Char _getTurn(String loaded_file) 
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader(loaded_file))
+                {
+                    while (sr.Peek() > -1)
+                    {
+                        String line = sr.ReadLine();
+                        if (line.StartsWith("TURN"))
+                        {
+                            String[] turn_info = line.Split();
+                            Char curr_turn = Convert.ToChar(turn_info[1]);
+                            Logger.log(String.Format(@"It has been decided that it is {0}'s turn currently.", curr_turn));
+                            return curr_turn;
+                        }
+                        else
+                            continue;
+                    }
+                    Logger.log("Never found a TURN directive in save file. Starting over...", "error");
+                    return '0';
+                }
+            }
+            catch (Exception)
+            {
+                Logger.log("Could not establish whose turn it was. Oh well, starting over...", "error");
+                return '0';
             }
         }
     }

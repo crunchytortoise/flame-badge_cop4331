@@ -277,7 +277,7 @@ namespace FlameBadge
                     writer.WriteLine();
 
                     // write the living player units and their positions
-                    writer.Write(@"P");
+                    writer.Write(@"Player {0}", FlameBadge.player_units.Count);
                     writer.WriteLine();
                     foreach (var unit in FlameBadge.player_units)
                     {
@@ -288,7 +288,7 @@ namespace FlameBadge
                     writer.WriteLine();
                     writer.WriteLine();                    
                     // write the living computer units and their positions
-                    writer.Write(@"C");
+                    writer.Write(@"Computer {0}", FlameBadge.cpu_units.Count);
                     writer.WriteLine();
                     foreach (var unit in FlameBadge.cpu_units)
                     {
@@ -299,7 +299,7 @@ namespace FlameBadge
                     writer.WriteLine();
                     writer.WriteLine();
                     // write who of the player units was taking his turn
-                    writer.Write(@"{0}", whose_turn);
+                    writer.Write(@"TURN {0}", whose_turn);
                 }
             }
             catch (Exception e)
