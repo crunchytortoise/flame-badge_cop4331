@@ -54,15 +54,18 @@ namespace FlameBadge
             i++;
             Console.SetCursorPosition(left, i);
             Console.Write("3 - Move Down and Right");
+            i++;
+            Console.SetCursorPosition(left, i);
+            Console.Write("Press the 's' key to save the game.");
         }
 
         public static void clearControlKey()
         {
             int i = top + 2;
-            for (int j = i; j < i + 9; j++)
+            for (int j = i; j < i + 10; j++)
             {
                 Console.SetCursorPosition(left, j);
-                Console.Write(new String(' ', 24));
+                Console.Write(new String(' ', 40));
             }
         }
     }

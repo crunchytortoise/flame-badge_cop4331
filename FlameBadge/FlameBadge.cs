@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,33 @@ namespace FlameBadge
         public static Boolean hasEnded = false;
         public static List<PlayerCharacter> player_units = new List<PlayerCharacter>();
         public static List<EnemyCharacter> cpu_units = new List<EnemyCharacter>();
+        public static String save_dir = Config.project_path + @"\\saves\\";
         
         public FlameBadge()
         {
+            // Set up saves directory
+            
+            if (!Directory.Exists(save_dir))
+                Directory.CreateDirectory(save_dir);
+
+            // Check if any save files exist
+            // If they don't we won't bother offering a load game option
+            DirectoryInfo dir = new DirectoryInfo(save_dir);
+            Boolean is_loaded = false;
+            if (dir.GetFiles().Length != 0)
+                is_loaded = _offerContinue();
+
+            String loaded_file = "";
+            if (is_loaded)
+                loaded_file = _getSavedGame(dir);
+
+            if (loaded_file == "")
+                is_loaded = false;
+            else
+                loaded_file = save_dir + loaded_file;
+
             // Draw the game board.
-            GameBoard game_board = new GameBoard();
+            GameBoard game_board = new GameBoard(is_loaded ? loaded_file : null);
 
             // Put the pieces on the board.
             placePlayerPieces();
@@ -90,6 +113,68 @@ namespace FlameBadge
             Console.WriteLine(msg);
             Console.ReadKey();
             System.Environment.Exit(0);
+        }
+
+        private Boolean _offerContinue()
+        {
+            System.Console.WriteLine(@"Previous saves detected...");
+            System.Console.WriteLine(@"1. Start New Game");
+            System.Console.WriteLine(@"2. Load Previous Save");
+            System.Console.WriteLine();
+            System.Console.Write(@"Please choose an option and press Enter (1 or 2): ");
+            ConsoleKeyInfo cmd;
+            while (true)
+            {
+                cmd = Console.ReadKey();
+
+                switch (cmd.KeyChar)
+                {
+                    case '1':
+                        return false;
+                    case '2':
+                        return true;
+                    default:
+                        System.Console.WriteLine(@"Invalid command, please enter 1 or 2: ");
+                        break;
+                }
+            }
+        }
+
+        private String _getSavedGame(DirectoryInfo dir)
+        {
+            System.Console.WriteLine();
+            System.Console.WriteLine(@"Found the following saved games:");
+            for(int i=0; i < dir.GetFiles().Length; i++)
+            {
+                System.Console.WriteLine((i+1).ToString() + @". " + dir.GetFiles()[i].Name);
+            }
+            System.Console.WriteLine();
+            System.Console.WriteLine();
+            System.Console.Write(@"Please choose a file or press '0' to start a new game: ");
+
+            ConsoleKeyInfo cmd;
+            while (true)
+            {
+                cmd = Console.ReadKey();
+                Int32 val = (int)Char.GetNumericValue(cmd.KeyChar);
+                
+                if (val == 0)
+                {
+                    return "";
+                }
+                else if (val > dir.GetFiles().Length + 1)
+                {
+                    System.Console.WriteLine();
+                    System.Console.WriteLine(@"Invalid selection, please choose a save file or press 0 to start a new game: ");
+                    continue;
+                }
+               
+                else
+                {
+                    return dir.GetFiles()[val - 1].Name;
+                }
+
+            }
         }
     }
 }

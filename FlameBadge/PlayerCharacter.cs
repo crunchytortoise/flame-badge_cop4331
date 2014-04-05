@@ -41,6 +41,12 @@ namespace FlameBadge
             {
                 cmd = Console.ReadKey();
 
+                if (cmd.KeyChar == 's' || cmd.KeyChar == 'S')
+                {
+                    GameBoard.saveGame(this.id);
+                    continue;
+                }
+
                 if (makeMove(cmd.KeyChar))
                     break;
                 else

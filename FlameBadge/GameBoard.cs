@@ -20,11 +20,17 @@ namespace FlameBadge
         public static Char[,] overlay { get; set; }
         private String game_map { get; set; }
 
-        public GameBoard()
+        private const Int16 MAP_SIZE = 20;
+
+        public GameBoard(String loaded_map = null)
         {
             // TODO: make MAP_SIZE a configurable value
-            const Int16 MAP_SIZE = 20;
-            game_map = String.Format(@"..\..\{0}.map", Config.project_name);
+            
+
+            if (String.IsNullOrEmpty(loaded_map))
+                game_map = String.Format(@"..\..\{0}.map", Config.project_name);
+            else
+                game_map = loaded_map;
 
             if(!this._parseMap(game_map, MAP_SIZE))
                 Environment.Exit(1);
@@ -246,6 +252,65 @@ namespace FlameBadge
         public static int distance(int x1, int y1, int x2, int y2)
         {
             return (int)Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+        }
+
+        public static String saveGame(Char whose_turn)
+        {
+            String timestamp = DateTime.Now.ToString(@"yyyyMMddHHmmffff");
+            String file_name = FlameBadge.save_dir + timestamp + @".fbsave";
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(file_name))
+                {
+                    // write the map
+                    for (int i = 0; i < MAP_SIZE; i++)
+                    {
+                        for (int j = 0; j < MAP_SIZE; j++)
+                        {
+                            writer.Write(board[i, j]);
+                            writer.Write(@" ");
+                        }
+                        writer.WriteLine();
+                    }
+                    writer.WriteLine();
+                    writer.WriteLine();
+
+                    // write the living player units and their positions
+                    writer.Write(@"P");
+                    writer.WriteLine();
+                    foreach (var unit in FlameBadge.player_units)
+                    {
+                        writer.Write(@"{0} {1} {2}", unit.id, unit.xPos, unit.yPos);
+                        writer.WriteLine();
+                    }
+
+                    writer.WriteLine();
+                    writer.WriteLine();                    
+                    // write the living computer units and their positions
+                    writer.Write(@"C");
+                    writer.WriteLine();
+                    foreach (var unit in FlameBadge.cpu_units)
+                    {
+                        writer.Write(@"{0} {1} {2}", unit.id, unit.xPos, unit.yPos);
+                        writer.WriteLine();
+                    }
+
+                    writer.WriteLine();
+                    writer.WriteLine();
+                    // write who of the player units was taking his turn
+                    writer.Write(@"{0}", whose_turn);
+                }
+            }
+            catch (Exception e)
+            {
+                String msg = String.Format(@"The game could not be saved. Reason: " + e);
+                Logger.log(msg, "error");
+                return null;
+            }
+
+            Logger.log("Game saved.");
+            return file_name;
         }
     }
 }
