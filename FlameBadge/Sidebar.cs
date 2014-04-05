@@ -65,7 +65,7 @@ namespace FlameBadge
             for (int j = i; j < i + 10; j++)
             {
                 Console.SetCursorPosition(left, j);
-                Console.Write(new String(' ', 40));
+                Console.Write(new String(' ', 24));
             }
         }
     }
