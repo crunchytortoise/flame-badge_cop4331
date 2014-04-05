@@ -61,7 +61,6 @@ namespace FlameBadge
                 {
                     // if we loaded a game, skip over everyone until the rightful
                     // unit goes
-                    Sidebar.announce(curr_turn.ToString());
                     if (curr_turn != '0')
                     {
                         if (player_units[i].id != curr_turn)
