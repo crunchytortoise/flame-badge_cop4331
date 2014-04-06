@@ -256,8 +256,48 @@ namespace FlameBadge
 
         public static String saveGame(Char whose_turn)
         {
-            String timestamp = DateTime.Now.ToString(@"yyyyMMddHHmmffff");
-            String file_name = FlameBadge.save_dir + timestamp + @".fbsave";
+
+            System.Console.Clear();
+            System.Console.Write(@"Save name: ");
+            String save_name = System.Console.ReadLine();
+            String file_name;
+
+            if (save_name == "")
+            {
+                String timestamp = DateTime.Now.ToString(@"yyyyMMddHHmmffff");
+                file_name = FlameBadge.save_dir + timestamp + @".fbsave";
+            }
+            else
+            {
+                file_name = FlameBadge.save_dir + save_name + @".fbsave";
+                if (File.Exists(file_name))
+                {
+                    System.Console.WriteLine("Are you sure you want to overwrite save '{0}'? (Y/n)", save_name);
+                    Boolean need_answer = true;
+                    while (need_answer)
+                    {
+                        ConsoleKeyInfo answer;
+                        answer = System.Console.ReadKey();
+
+                        switch (answer.KeyChar)
+                        {
+                            case 'n':
+                            case 'N':
+                                need_answer = false;
+                                GameBoard.saveGame(whose_turn);
+                                break;
+                            case 'y':
+                            case 'Y':
+                                need_answer = false;
+                                File.Delete(file_name);
+                                break;
+                            default:
+                                System.Console.WriteLine(@"Please input either 'y' or 'n': ");
+                                break;
+                        }
+                    }
+                }
+            }
 
             try
             {
@@ -301,6 +341,10 @@ namespace FlameBadge
                     // write who of the player units was taking his turn
                     writer.Write(@"TURN {0}", whose_turn);
                 }
+                System.Console.WriteLine("Game Saved!");
+                System.Threading.Thread.Sleep(1000);
+                GameBoard.redraw();
+                Sidebar.announce(String.Format(@"{0} taking turn...", whose_turn), true);
             }
             catch (Exception e)
             {
