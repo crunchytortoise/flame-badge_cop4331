@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,57 @@ namespace FlameBadge
             }
         }
 
+        public static void placePieces(Boolean is_loaded, String loaded_file)
+        {
+            if (!is_loaded)
+            {
+                Logger.log(@"Placing player pieces in random positions.");
+
+                for (int i = 0; i < Config.NUM_PLAYER; i++)
+                {
+                    Tuple<Int16, Int16> coords = PlayerCharacter.getStartingPosition();
+                    PlayerCharacter character = new PlayerCharacter(Convert.ToChar(i.ToString()), coords.Item1, coords.Item2);
+                    FlameBadge.player_units.Add(character);
+                    GameBoard.update(character, coords.Item1, coords.Item2);
+                    Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), coords.Item1, coords.Item2));
+                }
+            }
+            else
+            {
+                Logger.log(@"Placing player pieces according to loaded save file.");
+                try
+                {
+                    using (StreamReader sr = new StreamReader(loaded_file))
+                    {
+                        while (sr.Peek() > -1)
+                        {
+                            String line = sr.ReadLine();
+                            if (line.StartsWith("Player"))
+                            {
+                                for (int i = 0; i < Convert.ToInt16(line.Split()[1]); i++)
+                                {
+                                    String[] unit_info = sr.ReadLine().Split();
+                                    PlayerCharacter character = new PlayerCharacter(Convert.ToChar(unit_info[0]), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
+                                    FlameBadge.player_units.Add(character);
+                                    GameBoard.update(character, Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
+                                    Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2])));
+                                }
+                            }
+                        }
+
+
+
+                    }
+                }
+                catch (Exception)
+                {
+                    Logger.log("Could not load player pieces from save file. Quitting...", "error");
+                    Environment.Exit(1);
+                }
+
+            }
+        }
+
         public override void takeTurn()
         {
             Sidebar.announce(String.Format(@"{0} taking turn...", this.id.ToString()), true);
@@ -40,6 +92,12 @@ namespace FlameBadge
             while (true)
             {
                 cmd = Console.ReadKey();
+
+                if (cmd.KeyChar == 's' || cmd.KeyChar == 'S')
+                {
+                    GameBoard.saveGame(this.id);
+                    continue;
+                }
 
                 if (makeMove(cmd.KeyChar))
                     break;
