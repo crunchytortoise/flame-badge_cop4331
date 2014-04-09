@@ -15,7 +15,7 @@ namespace FlameBadge
 {
     class PlayerCharacter : Character
     {
-        public PlayerCharacter(Char id, Int16 x, Int16 y) : base(id, x, y) {}
+        public PlayerCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) {}
 
         public static Tuple<Int16, Int16> getStartingPosition()
         {
@@ -42,10 +42,10 @@ namespace FlameBadge
                 for (int i = 0; i < Config.NUM_PLAYER; i++)
                 {
                     Tuple<Int16, Int16> coords = PlayerCharacter.getStartingPosition();
-                    PlayerCharacter character = new PlayerCharacter(Convert.ToChar(i.ToString()), coords.Item1, coords.Item2);
+                    PlayerCharacter character = new PlayerCharacter(Convert.ToChar(i.ToString()), coords.Item1, coords.Item2, 10, 1, 1);
                     FlameBadge.player_units.Add(character);
                     GameBoard.update(character, coords.Item1, coords.Item2);
-                    Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), coords.Item1, coords.Item2));
+                    Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
                 }
             }
             else
@@ -63,10 +63,10 @@ namespace FlameBadge
                                 for (int i = 0; i < Convert.ToInt16(line.Split()[1]); i++)
                                 {
                                     String[] unit_info = sr.ReadLine().Split();
-                                    PlayerCharacter character = new PlayerCharacter(Convert.ToChar(unit_info[0]), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
+                                    PlayerCharacter character = new PlayerCharacter(Convert.ToChar(unit_info[0]), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]), Convert.ToInt32(unit_info[3]), Convert.ToInt32(unit_info[4]), Convert.ToInt32(unit_info[5]));
                                     FlameBadge.player_units.Add(character);
                                     GameBoard.update(character, Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
-                                    Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2])));
+                                    Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]), Convert.ToInt32(unit_info[3]), Convert.ToInt32(unit_info[4]), Convert.ToInt32(unit_info[5])));
                                 }
                             }
                         }

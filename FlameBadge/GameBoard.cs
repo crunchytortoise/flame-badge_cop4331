@@ -149,6 +149,67 @@ namespace FlameBadge
 
         }
 
+        /// <summary>
+        /// Attacker deals damage to the defender
+        /// </summary>
+        /// <param name="attackerID"></param>
+        /// <param name="defenderID"></param>
+        /// <param name="player">true- player, false- cpu</param>
+        public static void attack(int attackerID, int defenderID, bool player)
+        {
+            int id = 0;
+            if(player)
+                for (int i = 0; i < FlameBadge.player_units.Count; i++)
+                {
+                    if (FlameBadge.player_units[i].id == attackerID)
+                    {
+                        id = i;
+                    }
+                } 
+            else
+            {
+                for (int i = 0; i < FlameBadge.cpu_units.Count; i++)
+                {
+                    if (FlameBadge.cpu_units[i].id == attackerID)
+                    {
+                        id = i;
+                    }
+                } 
+            }
+            if (player)
+            {
+                for (int i = 0; i < FlameBadge.cpu_units.Count; i++)
+                {
+                    if (FlameBadge.cpu_units[i].id == defenderID)
+                    {
+                        FlameBadge.cpu_units[i].damage(FlameBadge.player_units[id].dpsMod);
+                        if (FlameBadge.cpu_units[i].health <= 0)
+                        {
+                            overlay[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos] = board[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos];
+                            FlameBadge.cpu_units.RemoveAt(i);
+                            FlameBadge.player_units[id].levelUp();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < FlameBadge.player_units.Count; i++)
+                {
+                    if (FlameBadge.player_units[i].id == defenderID)
+                    {
+                        FlameBadge.player_units[i].damage(FlameBadge.cpu_units[id].dpsMod);
+                        if (FlameBadge.player_units[i].health <= 0)
+                        {
+                            overlay[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos] = board[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos];
+                            FlameBadge.player_units.RemoveAt(i);
+                            FlameBadge.cpu_units[id].levelUp();
+                        }
+                    }
+                }
+            }
+        }
+
         public static Boolean isOccupied(Int32 x, Int32 y)
         {
             if (overlay[y, x].Equals('.'))
@@ -316,23 +377,23 @@ namespace FlameBadge
                     writer.WriteLine();
                     writer.WriteLine();
 
-                    // write the living player units and their positions
+                    // write the living player units and their positions, and stats
                     writer.Write(@"Player {0}", FlameBadge.player_units.Count);
                     writer.WriteLine();
                     foreach (var unit in FlameBadge.player_units)
                     {
-                        writer.Write(@"{0} {1} {2}", unit.id, unit.xPos, unit.yPos);
+                        writer.Write(@"{0} {1} {2} {3} {4} {5}", unit.id, unit.xPos, unit.yPos, unit.health, unit.level, unit.dpsMod);
                         writer.WriteLine();
                     }
 
                     writer.WriteLine();
                     writer.WriteLine();                    
-                    // write the living computer units and their positions
+                    // write the living computer units and their positions, and stats
                     writer.Write(@"Computer {0}", FlameBadge.cpu_units.Count);
                     writer.WriteLine();
                     foreach (var unit in FlameBadge.cpu_units)
                     {
-                        writer.Write(@"{0} {1} {2}", unit.id, unit.xPos, unit.yPos);
+                        writer.Write(@"{0} {1} {2} {3} {4} {5}", unit.id, unit.xPos, unit.yPos, unit.health, unit.level, unit.dpsMod);
                         writer.WriteLine();
                     }
 
