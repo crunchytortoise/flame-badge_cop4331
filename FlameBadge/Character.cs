@@ -36,8 +36,20 @@ namespace FlameBadge
         /// Deals damage to the character.
         /// </summary>
         /// <param name="damage"></param>
-        public void damage(int damage)
+        public void damage(int dpsMod)
         {
+            Random rnd = new Random();
+            int damage = rnd.Next(1, 4) + dpsMod;
+            if (rnd.Next(1, 21) == 20)
+            {
+                Logger.log(String.Format(@"Critical hit!"), "debug");
+                damage = 6 + dpsMod;
+            }
+            if (rnd.Next(1, 21) < 4)
+            {
+                Logger.log(String.Format(@"Miss!"), "debug");
+                damage = 0;
+            }
             Logger.log(String.Format(@"Dealing {0} damage to {1}...", damage, this.id), "debug");
             this.health -= damage;
         }

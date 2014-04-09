@@ -157,14 +157,38 @@ namespace FlameBadge
         /// <param name="player">true- player, false- cpu</param>
         public static void attack(int attackerID, int defenderID, bool player)
         {
+            int id = 0;
+            if(player)
+                for (int i = 0; i < FlameBadge.player_units.Count; i++)
+                {
+                    if (FlameBadge.player_units[i].id == attackerID)
+                    {
+                        id = i;
+                    }
+                } 
+            else
+            {
+                for (int i = 0; i < FlameBadge.cpu_units.Count; i++)
+                {
+                    if (FlameBadge.cpu_units[i].id == attackerID)
+                    {
+                        id = i;
+                    }
+                } 
+            }
             if (player)
             {
                 for (int i = 0; i < FlameBadge.cpu_units.Count; i++)
                 {
                     if (FlameBadge.cpu_units[i].id == defenderID)
                     {
-                        overlay[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos] = board[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos];
-                        FlameBadge.cpu_units.RemoveAt(i);
+                        FlameBadge.cpu_units[i].damage(FlameBadge.player_units[id].dpsMod);
+                        if (FlameBadge.cpu_units[i].health <= 0)
+                        {
+                            overlay[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos] = board[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos];
+                            FlameBadge.cpu_units.RemoveAt(i);
+                            FlameBadge.player_units[id].levelUp();
+                        }
                     }
                 }
             }
@@ -174,8 +198,13 @@ namespace FlameBadge
                 {
                     if (FlameBadge.player_units[i].id == defenderID)
                     {
-                        overlay[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos] = board[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos];
-                        FlameBadge.player_units.RemoveAt(i);
+                        FlameBadge.player_units[i].damage(FlameBadge.cpu_units[id].dpsMod);
+                        if (FlameBadge.player_units[i].health <= 0)
+                        {
+                            overlay[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos] = board[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos];
+                            FlameBadge.player_units.RemoveAt(i);
+                            FlameBadge.cpu_units[id].levelUp();
+                        }
                     }
                 }
             }
