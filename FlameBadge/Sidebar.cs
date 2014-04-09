@@ -63,6 +63,12 @@ namespace FlameBadge
                 Console.SetCursorPosition(left, i);
                 Console.Write("{0}- level: {1}, health: {2}", FlameBadge.player_units[j].id, FlameBadge.player_units[j].level, FlameBadge.player_units[j].health);
             }
+            for (int j = 0; j < FlameBadge.cpu_units.Count; j++)
+            {
+                i++;
+                Console.SetCursorPosition(left, i);
+                Console.Write("{0}- level: {1}, health: {2}", FlameBadge.cpu_units[j].id, FlameBadge.cpu_units[j].level, FlameBadge.cpu_units[j].health);
+            }
         }
 
         public static void clearControlKey()
