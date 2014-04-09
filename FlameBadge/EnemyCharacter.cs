@@ -9,7 +9,7 @@ namespace FlameBadge
 {
     class EnemyCharacter : Character
     {
-        public EnemyCharacter(Char id, Int16 x, Int16 y) : base(id, x, y) {}
+        public EnemyCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) {}
 
         public static Tuple<Int16, Int16> getStartingPosition()
         {
@@ -35,7 +35,7 @@ namespace FlameBadge
                 for (int i = 0; i < Config.NUM_CPU; i++)
                 {
                     Tuple<Int16, Int16> coords = EnemyCharacter.getStartingPosition();
-                    EnemyCharacter character = new EnemyCharacter(EnemyCharacter._toAlpha(i), coords.Item1, coords.Item2);
+                    EnemyCharacter character = new EnemyCharacter(EnemyCharacter._toAlpha(i), coords.Item1, coords.Item2, 10, 1, 1);
                     FlameBadge.cpu_units.Add(character);
                     GameBoard.update(character, coords.Item1, coords.Item2);
                 }
@@ -55,10 +55,10 @@ namespace FlameBadge
                                 for (int i = 0; i < Convert.ToInt16(line.Split()[1]); i++)
                                 {
                                     String[] unit_info = sr.ReadLine().Split();
-                                    EnemyCharacter character = new EnemyCharacter(Convert.ToChar(unit_info[0]), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
+                                    EnemyCharacter character = new EnemyCharacter(Convert.ToChar(unit_info[0]), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]), Convert.ToInt32(unit_info[3]), Convert.ToInt32(unit_info[4]), Convert.ToInt32(unit_info[5]));
                                     FlameBadge.cpu_units.Add(character);
                                     GameBoard.update(character, Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]));
-                                    Logger.log(String.Format(@"Placed {0} at {1}, {2}", character.id.ToString(), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2])));
+                                    Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), Convert.ToInt16(unit_info[1]), Convert.ToInt16(unit_info[2]), Convert.ToInt32(unit_info[3]), Convert.ToInt32(unit_info[4]), Convert.ToInt32(unit_info[5])));
                                 }
                             }
                         }

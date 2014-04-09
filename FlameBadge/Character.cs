@@ -15,16 +15,42 @@ namespace FlameBadge
 {
     public abstract class Character
     {
-        public Character(Char id, Int16 x, Int16 y)
+        public Character(Char id, Int16 x, Int16 y, int health, int level, int dpsMod)
         {
             this.id = id;
             this.xPos = x;
             this.yPos = y;
+            this.health = health;
+            this.dpsMod = dpsMod;
+            this.level = level;
         }
 
         public Char id { get; set; }
         public Int16 xPos { get; set; }
         public Int16 yPos { get; set; }
+        public int level { get; set; }
+        public int health { get; set; }
+        public int dpsMod { get; set; }
+
+        /// <summary>
+        /// Deals damage to the character.
+        /// </summary>
+        /// <param name="damage"></param>
+        public void damage(int damage)
+        {
+            Logger.log(String.Format(@"Dealing {0} damage to {1}...", damage, this.id), "debug");
+            this.health -= damage;
+        }
+        /// <summary>
+        /// Levels up the character, increases their damage modifier and health
+        /// </summary>
+        public void levelUp() 
+        {
+            Logger.log(String.Format(@"Leveling up {0} by one.", this.id), "debug");
+            this.level++;
+            this.dpsMod++;
+            this.health += 5;
+        }
 
         /// <summary>
         /// Moves the character up one space.

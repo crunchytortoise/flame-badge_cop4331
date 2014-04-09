@@ -261,7 +261,7 @@ namespace FlameBadge
                 Character potentialUnit = null;
 
                 // create a new character so that we don't override the original
-                potentialUnit = new EnemyCharacter(c.id, (short)move.Item1, (short)move.Item2);
+                potentialUnit = new EnemyCharacter(c.id, (short)move.Item1, (short)move.Item2, c.health, c.level, c.dpsMod);
                 heuristic += canAttackBaseAttacker(potentialUnit, enemyUnits, cpuBasePos);
                 heuristic += canDamageOpponentBase(potentialUnit, playerBasePos);
                 heuristic += isGuardingBase(potentialUnit, cpuBasePos);
@@ -320,7 +320,7 @@ namespace FlameBadge
                     if (cpuTurn)
                     {
                         // create a new character so that we don't override the original
-                        potentialUnit = new EnemyCharacter(unit.id, (short)move.Item1, (short)move.Item2);
+                        potentialUnit = new EnemyCharacter(unit.id, (short)move.Item1, (short)move.Item2, unit.health, unit.level, unit.dpsMod);
                         heuristic += canAttackBaseAttacker(potentialUnit, enemyUnits, cpuBasePos);
                         heuristic += canDamageOpponentBase(potentialUnit, playerBasePos);
                         heuristic += isGuardingBase(potentialUnit, cpuBasePos);
@@ -330,7 +330,7 @@ namespace FlameBadge
                     else
                     {
                         // create a new character so that we don't override the original
-                        potentialUnit = new PlayerCharacter(unit.id, (short)move.Item1, (short)move.Item2);
+                        potentialUnit = new PlayerCharacter(unit.id, (short)move.Item1, (short)move.Item2, unit.health, unit.level, unit.dpsMod);
                         heuristic += canAttackBaseAttacker(potentialUnit, enemyUnits, playerBasePos);
                         heuristic += canDamageOpponentBase(potentialUnit, cpuBasePos);
                         heuristic += isGuardingBase(potentialUnit, playerBasePos);
@@ -374,7 +374,7 @@ namespace FlameBadge
                     Character potentialUnit = null;
 
                     // create a new character so that we don't override the original
-                    potentialUnit = new EnemyCharacter(c.id, (short)move.Item1, (short)move.Item2);
+                    potentialUnit = new EnemyCharacter(c.id, (short)move.Item1, (short)move.Item2, c.health, c.level, c.dpsMod);
                     heuristic += canAttackBaseAttacker(potentialUnit, enemyUnits, cpuBasePos);
                     heuristic += canDamageOpponentBase(potentialUnit, playerBasePos);
                     heuristic += isGuardingBase(potentialUnit, cpuBasePos);

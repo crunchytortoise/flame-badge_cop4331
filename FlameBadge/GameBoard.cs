@@ -316,23 +316,23 @@ namespace FlameBadge
                     writer.WriteLine();
                     writer.WriteLine();
 
-                    // write the living player units and their positions
+                    // write the living player units and their positions, and stats
                     writer.Write(@"Player {0}", FlameBadge.player_units.Count);
                     writer.WriteLine();
                     foreach (var unit in FlameBadge.player_units)
                     {
-                        writer.Write(@"{0} {1} {2}", unit.id, unit.xPos, unit.yPos);
+                        writer.Write(@"{0} {1} {2} {3} {4} {5}", unit.id, unit.xPos, unit.yPos, unit.health, unit.level, unit.dpsMod);
                         writer.WriteLine();
                     }
 
                     writer.WriteLine();
                     writer.WriteLine();                    
-                    // write the living computer units and their positions
+                    // write the living computer units and their positions, and stats
                     writer.Write(@"Computer {0}", FlameBadge.cpu_units.Count);
                     writer.WriteLine();
                     foreach (var unit in FlameBadge.cpu_units)
                     {
-                        writer.Write(@"{0} {1} {2}", unit.id, unit.xPos, unit.yPos);
+                        writer.Write(@"{0} {1} {2} {3} {4} {5}", unit.id, unit.xPos, unit.yPos, unit.health, unit.level, unit.dpsMod);
                         writer.WriteLine();
                     }
 
