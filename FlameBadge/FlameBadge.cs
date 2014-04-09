@@ -69,13 +69,31 @@ namespace FlameBadge
                             curr_turn = '0';
                     }
                     player_units[i].takeTurn();
-                    if (FlameBadge.hasEnded)
-                        _endGame();
+                    List<Character> victims = GameBoard.getAttackableUnits(player_units[i].xPos, player_units[i].yPos, cpu_units.Cast<Character>().ToList());
+                    if (victims.Count > 0)
+                    {
+                        //pass in true to signify player
+                        GameBoard.attack(player_units[i].id, victims[0].id, true);
+                        GameBoard.redraw();
+                        if (cpu_units.Count == 0)
+                            FlameBadge.hasEnded = true;
+                    }
+                        if (FlameBadge.hasEnded)
+                            _endGame();
                 }
 
                 for (int i = 0; i < cpu_units.Count; i++)
                 {
                     cpu_units[i].takeTurn();
+                    List<Character> victims = GameBoard.getAttackableUnits(cpu_units[i].xPos, cpu_units[i].yPos, player_units.Cast<Character>().ToList());
+                    if (victims.Count > 0)
+                    {
+                        //pass in false to signify AI
+                        GameBoard.attack(cpu_units[i].id, victims[0].id, false);
+                        GameBoard.redraw();
+                        if (player_units.Count == 0)
+                            FlameBadge.hasEnded = true;
+                    }
                     if (FlameBadge.hasEnded)
                         _endGame();
                 }

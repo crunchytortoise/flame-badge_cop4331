@@ -149,6 +149,38 @@ namespace FlameBadge
 
         }
 
+        /// <summary>
+        /// Attacker deals damage to the defender
+        /// </summary>
+        /// <param name="attackerID"></param>
+        /// <param name="defenderID"></param>
+        /// <param name="player">true- player, false- cpu</param>
+        public static void attack(int attackerID, int defenderID, bool player)
+        {
+            if (player)
+            {
+                for (int i = 0; i < FlameBadge.cpu_units.Count; i++)
+                {
+                    if (FlameBadge.cpu_units[i].id == defenderID)
+                    {
+                        overlay[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos] = board[FlameBadge.cpu_units[i].yPos, FlameBadge.cpu_units[i].xPos];
+                        FlameBadge.cpu_units.RemoveAt(i);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < FlameBadge.player_units.Count; i++)
+                {
+                    if (FlameBadge.player_units[i].id == defenderID)
+                    {
+                        overlay[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos] = board[FlameBadge.player_units[i].yPos, FlameBadge.player_units[i].xPos];
+                        FlameBadge.player_units.RemoveAt(i);
+                    }
+                }
+            }
+        }
+
         public static Boolean isOccupied(Int32 x, Int32 y)
         {
             if (overlay[y, x].Equals('.'))
