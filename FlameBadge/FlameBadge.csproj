@@ -63,6 +63,7 @@
     <Compile Include="FlameBadge.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

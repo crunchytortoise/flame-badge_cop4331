@@ -25,15 +25,25 @@ namespace FlameBadge
         public GameBoard(String loaded_map = null)
         {
             // TODO: make MAP_SIZE a configurable value
-            
+
 
             if (String.IsNullOrEmpty(loaded_map))
+            {
                 game_map = String.Format(@"..\..\{0}.map", Config.project_name);
+                //game_map = Map.create(1);
+            }
+                
             else
                 game_map = loaded_map;
 
             if(!this._parseMap(game_map, MAP_SIZE))
                 Environment.Exit(1);
+
+            if (String.IsNullOrEmpty(loaded_map))
+            {
+                //game_map = String.Format(@"..\..\{0}.map", Config.project_name);
+                board = Map.create(1);
+            }
 
             Console.SetWindowSize(Console.WindowWidth + board.GetLength(0), Console.WindowHeight + board.GetLength(1));
             
@@ -212,7 +222,7 @@ namespace FlameBadge
 
         public static Boolean isOccupied(Int32 x, Int32 y)
         {
-            if (overlay[y, x].Equals('.'))
+            if (overlay[y, x].Equals('%') || overlay[y, x].Equals('=') || overlay[y, x].Equals('&') || overlay[y, x].Equals('_'))
                 return false;
             else
             {
