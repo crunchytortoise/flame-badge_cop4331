@@ -99,7 +99,7 @@ namespace FlameBadge
             {
                 for (Int16 j = 0; j < MAP_SIZE; j++)
                 {
-                    if (board[i, j] == '+')
+                    if (board[i, j] == '*')
                     {
                         loc = new Tuple<Int16, Int16>(i, j);
                         return loc;
@@ -115,7 +115,7 @@ namespace FlameBadge
             {
                 for (Int16 j = 0; j < MAP_SIZE; j++)
                 {
-                    if (board[i, j] == '*')
+                    if (board[i, j] == '+')
                     {
                         loc = new Tuple<Int16, Int16>(i, j);
                         return loc;
@@ -255,7 +255,7 @@ namespace FlameBadge
 
         public static Boolean isOccupied(Int32 x, Int32 y)
         {
-            if (overlay[y, x].Equals('%') || overlay[y, x].Equals('=') || overlay[y, x].Equals('&') || overlay[y, x].Equals('_'))
+            if (overlay[y, x].Equals('%') || overlay[y, x].Equals('=') || overlay[y, x].Equals('&') || overlay[y, x].Equals('_') || overlay[y, x].Equals('*') || overlay[y, x].Equals('+'))
                 return false;
             else
             {

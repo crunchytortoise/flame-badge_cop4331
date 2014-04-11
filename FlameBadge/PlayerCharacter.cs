@@ -37,7 +37,7 @@ namespace FlameBadge
         {
             if (!is_loaded)
             {
-                Tuple<Int16,Int16> castleCoords = GameBoard.getCPUCastle();
+                Tuple<Int16,Int16> castleCoords = GameBoard.getPlayerCastle();
                 Int16 j = castleCoords.Item1;
                 Int16 i = castleCoords.Item2;
 

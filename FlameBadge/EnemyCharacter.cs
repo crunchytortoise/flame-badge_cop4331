@@ -31,8 +31,8 @@ namespace FlameBadge
         {
             if (!is_loaded)
             {
-                Logger.log(@"Placing enemy pieces in random positions.");
-                Tuple<Int16, Int16> castleCoords = GameBoard.getPlayerCastle();
+                //Logger.log(@"Placing enemy pieces in random positions.");
+                Tuple<Int16, Int16> castleCoords = GameBoard.getCPUCastle();
                 Int16 j = castleCoords.Item1;
                 Int16 i = castleCoords.Item2;
 
@@ -204,8 +204,8 @@ namespace FlameBadge
             Tuple<int, int> convertedLoc = Tuple.Create((int)castleLoc.Item2, (int)castleLoc.Item1);
             Tuple<Int16, Int16> castlePlayerLoc = GameBoard.getPlayerCastle();
             Tuple<int, int> convertedPlayerLoc = Tuple.Create((int)castlePlayerLoc.Item2, (int)castlePlayerLoc.Item1);
-            //I mixed up who starts where =\, the information is passing in correctly
-            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, convertedLoc, convertedPlayerLoc, 3);
+            
+            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, convertedPlayerLoc, convertedLoc, 2);
 
             Tuple<int, int> nextMoveLoc = smartCPU.getNextMove(this);
             if (nextMoveLoc.Item1 < this.xPos && nextMoveLoc.Item2 > this.yPos) { makeMove('1'); }
