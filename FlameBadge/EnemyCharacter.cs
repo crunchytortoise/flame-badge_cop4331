@@ -200,7 +200,12 @@ namespace FlameBadge
             // EXAMPLE AI CODE (AI object should be declared at a higher level though, not for each individual unit).
             // The 3rd and 4th parameters are base positions. If given with x and y less than 0, the AI assumes no bases exist.
             // The 5th parameter is the AI level, which controls how far into the future the search goes. The level caps at 5 (because any higher takes forever).
-            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, new Tuple<int, int>(-1, -1), new Tuple<int, int>(-1, -1), 3);
+            Tuple<Int16, Int16> castleLoc = GameBoard.getCPUCastle();
+            Tuple<int, int> convertedLoc = Tuple.Create((int)castleLoc.Item2, (int)castleLoc.Item1);
+            Tuple<Int16, Int16> castlePlayerLoc = GameBoard.getPlayerCastle();
+            Tuple<int, int> convertedPlayerLoc = Tuple.Create((int)castlePlayerLoc.Item2, (int)castlePlayerLoc.Item1);
+            //I mixed up who starts where =\, the information is passing in correctly
+            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, convertedLoc, convertedPlayerLoc, 3);
 
             Tuple<int, int> nextMoveLoc = smartCPU.getNextMove(this);
             if (nextMoveLoc.Item1 < this.xPos && nextMoveLoc.Item2 > this.yPos) { makeMove('1'); }
