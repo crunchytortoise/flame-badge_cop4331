@@ -92,6 +92,39 @@ namespace FlameBadge
             return true;
         }
 
+        public static Tuple<Int16, Int16> getPlayerCastle()
+        {
+            Tuple<Int16, Int16> loc = null;
+            for (Int16 i = 0; i < MAP_SIZE; i++)
+            {
+                for (Int16 j = 0; j < MAP_SIZE; j++)
+                {
+                    if (board[i, j] == '+')
+                    {
+                        loc = new Tuple<Int16, Int16>(i, j);
+                        return loc;
+                    }
+                }
+            }
+            return loc;
+        }
+        public static Tuple<Int16, Int16> getCPUCastle()
+        {
+            Tuple<Int16, Int16> loc = null;
+            for (Int16 i = 0; i < MAP_SIZE; i++)
+            {
+                for (Int16 j = 0; j < MAP_SIZE; j++)
+                {
+                    if (board[i, j] == '*')
+                    {
+                        loc = new Tuple<Int16, Int16>(i, j);
+                        return loc;
+                    }
+                }
+            }
+            return loc;
+        }
+
          /// <summary>
          /// Void method to redraw the overlay canvas so we can simulate
          /// movement. The underlying <c>board</c> variable is untouched.</summary>
