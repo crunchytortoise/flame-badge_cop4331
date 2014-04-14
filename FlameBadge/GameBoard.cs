@@ -25,15 +25,25 @@ namespace FlameBadge
         public GameBoard(String loaded_map = null)
         {
             // TODO: make MAP_SIZE a configurable value
-            
+
 
             if (String.IsNullOrEmpty(loaded_map))
+            {
                 game_map = String.Format(@"..\..\{0}.map", Config.project_name);
+                //game_map = Map.create(1);
+            }
+                
             else
                 game_map = loaded_map;
 
             if(!this._parseMap(game_map, MAP_SIZE))
                 Environment.Exit(1);
+
+            if (String.IsNullOrEmpty(loaded_map))
+            {
+                //game_map = String.Format(@"..\..\{0}.map", Config.project_name);
+                board = Map.create(1);
+            }
 
             Console.SetWindowSize(Console.WindowWidth + board.GetLength(0), Console.WindowHeight + board.GetLength(1));
             
@@ -80,6 +90,39 @@ namespace FlameBadge
 
             Logger.log(@"Map initialized succesfully!");
             return true;
+        }
+
+        public static Tuple<Int16, Int16> getPlayerCastle()
+        {
+            Tuple<Int16, Int16> loc = null;
+            for (Int16 i = 0; i < MAP_SIZE; i++)
+            {
+                for (Int16 j = 0; j < MAP_SIZE; j++)
+                {
+                    if (board[i, j] == '*')
+                    {
+                        loc = new Tuple<Int16, Int16>(i, j);
+                        return loc;
+                    }
+                }
+            }
+            return loc;
+        }
+        public static Tuple<Int16, Int16> getCPUCastle()
+        {
+            Tuple<Int16, Int16> loc = null;
+            for (Int16 i = 0; i < MAP_SIZE; i++)
+            {
+                for (Int16 j = 0; j < MAP_SIZE; j++)
+                {
+                    if (board[i, j] == '+')
+                    {
+                        loc = new Tuple<Int16, Int16>(i, j);
+                        return loc;
+                    }
+                }
+            }
+            return loc;
         }
 
          /// <summary>
@@ -212,7 +255,7 @@ namespace FlameBadge
 
         public static Boolean isOccupied(Int32 x, Int32 y)
         {
-            if (overlay[y, x].Equals('.'))
+            if (overlay[y, x].Equals('%') || overlay[y, x].Equals('=') || overlay[y, x].Equals('&') || overlay[y, x].Equals('_') || overlay[y, x].Equals('*') || overlay[y, x].Equals('+'))
                 return false;
             else
             {

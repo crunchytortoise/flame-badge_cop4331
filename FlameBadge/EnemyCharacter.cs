@@ -31,14 +31,104 @@ namespace FlameBadge
         {
             if (!is_loaded)
             {
-                Logger.log(@"Placing enemy pieces in random positions.");
-                for (int i = 0; i < Config.NUM_CPU; i++)
+                //Logger.log(@"Placing enemy pieces in random positions.");
+                Tuple<Int16, Int16> castleCoords = GameBoard.getCPUCastle();
+                Int16 j = castleCoords.Item1;
+                Int16 i = castleCoords.Item2;
+
+                //Logger.log(@"Placing player pieces in random positions.");
+                if (i - 1 >= 0)
                 {
-                    Tuple<Int16, Int16> coords = EnemyCharacter.getStartingPosition();
-                    EnemyCharacter character = new EnemyCharacter(EnemyCharacter._toAlpha(i), coords.Item1, coords.Item2, 10, 1, 1);
-                    FlameBadge.cpu_units.Add(character);
-                    GameBoard.update(character, coords.Item1, coords.Item2);
+                    if (GameBoard.overlay[i - 1, j] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i - 1), (short)j);
+                        EnemyCharacter character = new EnemyCharacter('A', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
                 }
+                if (i + 1 < GameBoard.overlay.GetLength(0))
+                {
+                    if (GameBoard.overlay[i + 1, j] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)j);
+                        EnemyCharacter character = new EnemyCharacter('B', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+                }
+                if (j - 1 >= 0)
+                {
+                    if (GameBoard.overlay[i, j - 1] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i), (short)(j - 1));
+                        EnemyCharacter character = new EnemyCharacter('C', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+                }
+                if (j + 1 < GameBoard.overlay.GetLength(1))
+                {
+                    if (GameBoard.overlay[i, j + 1] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i), (short)(j + 1));
+                        EnemyCharacter character = new EnemyCharacter('D', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+                }
+
+                //diagonals
+                if (i - 1 >= 0 && j + 1 < GameBoard.overlay.GetLength(1))
+                {
+                    if (GameBoard.overlay[i - 1, j + 1] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i - 1), (short)(j + 1));
+                        EnemyCharacter character = new EnemyCharacter('E', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+                }
+                if (i + 1 < GameBoard.overlay.GetLength(0) && j - 1 >= 0)
+                {
+                    if (GameBoard.overlay[i + 1, j - 1] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)(j - 1));
+                        EnemyCharacter character = new EnemyCharacter('F', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+                }
+                if (i - 1 >= 0 && j - 1 >= 0)
+                {
+                    if (GameBoard.overlay[i - 1, j - 1] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i - 1), (short)(j - 1));
+                        EnemyCharacter character = new EnemyCharacter('G', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+                }
+                if (i + 1 < GameBoard.overlay.GetLength(0) && j + 1 < GameBoard.overlay.GetLength(1))
+                {
+                    if (GameBoard.overlay[i + 1, j + 1] != '@')
+                    {
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)(j + 1));
+                        EnemyCharacter character = new EnemyCharacter('H', coords.Item1, coords.Item2, 10, 1, 1);
+                        FlameBadge.cpu_units.Add(character);
+                        GameBoard.update(character, coords.Item1, coords.Item2);
+                        Logger.log(String.Format(@"Placed {0} at {1}, {2} with health {3}, level {4}, and dpsMod {5}", character.id.ToString(), coords.Item1, coords.Item2, 10, 1, 1));
+                    }
+
+                }
+                
             }
             else
             {
@@ -110,7 +200,12 @@ namespace FlameBadge
             // EXAMPLE AI CODE (AI object should be declared at a higher level though, not for each individual unit).
             // The 3rd and 4th parameters are base positions. If given with x and y less than 0, the AI assumes no bases exist.
             // The 5th parameter is the AI level, which controls how far into the future the search goes. The level caps at 5 (because any higher takes forever).
-            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, new Tuple<int, int>(-1, -1), new Tuple<int, int>(-1, -1), 3);
+            Tuple<Int16, Int16> castleLoc = GameBoard.getCPUCastle();
+            Tuple<int, int> convertedLoc = Tuple.Create((int)castleLoc.Item2, (int)castleLoc.Item1);
+            Tuple<Int16, Int16> castlePlayerLoc = GameBoard.getPlayerCastle();
+            Tuple<int, int> convertedPlayerLoc = Tuple.Create((int)castlePlayerLoc.Item2, (int)castlePlayerLoc.Item1);
+            
+            AI smartCPU = new AI(FlameBadge.player_units, FlameBadge.cpu_units, convertedPlayerLoc, convertedLoc, 2);
 
             Tuple<int, int> nextMoveLoc = smartCPU.getNextMove(this);
             if (nextMoveLoc.Item1 < this.xPos && nextMoveLoc.Item2 > this.yPos) { makeMove('1'); }

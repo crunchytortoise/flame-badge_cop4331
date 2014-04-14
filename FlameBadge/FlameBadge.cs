@@ -15,6 +15,7 @@ namespace FlameBadge
     class FlameBadge
     {
         public static Boolean hasEnded = false;
+        public static Boolean cpuCapture = false;
         public static List<PlayerCharacter> player_units = new List<PlayerCharacter>();
         public static List<EnemyCharacter> cpu_units = new List<EnemyCharacter>();
         public static String save_dir = Config.project_path + @"\\saves\\";
@@ -78,6 +79,11 @@ namespace FlameBadge
                         if (cpu_units.Count == 0)
                             FlameBadge.hasEnded = true;
                     }
+                    Tuple<Int16, Int16> enemyCastle = GameBoard.getCPUCastle();
+                    if ((int)enemyCastle.Item2 == (int)player_units[i].xPos && (int)enemyCastle.Item1 == (int)player_units[i].yPos)
+                    {
+                        FlameBadge.hasEnded = true;
+                    }
                         if (FlameBadge.hasEnded)
                             _endGame();
                 }
@@ -94,6 +100,12 @@ namespace FlameBadge
                         if (player_units.Count == 0)
                             FlameBadge.hasEnded = true;
                     }
+                    Tuple<Int16, Int16> enemyCastle = GameBoard.getPlayerCastle();
+                    if ((int)enemyCastle.Item2 == (int)cpu_units[i].xPos && (int)enemyCastle.Item1 == (int)cpu_units[i].yPos)
+                    {
+                        FlameBadge.hasEnded = true;
+                        FlameBadge.cpuCapture = true;
+                    }
                     if (FlameBadge.hasEnded)
                         _endGame();
                 }
@@ -105,7 +117,7 @@ namespace FlameBadge
         {
             String msg;
 
-            if (player_units.Count == 0)
+            if (player_units.Count == 0 || FlameBadge.cpuCapture)
                 msg = @"The computer wins! Press any key to quit...";
             else
                 msg = @"You win! Press any key to quit...";
