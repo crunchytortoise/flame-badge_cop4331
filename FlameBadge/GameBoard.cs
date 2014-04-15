@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FlameBadge
 {
-    class GameBoard
+    public class GameBoard
     {
         private static Char[,] board { get; set; }
         public static Char[,] overlay { get; set; }
@@ -144,6 +144,16 @@ namespace FlameBadge
             }
             return true;
         }
+
+
+        public char getTextureAtLocation(int x, int y)
+        {
+            return overlay[x, y];
+        }
+
+//        public Character getUnitAtLocation(int x, int y)
+ //       {
+  //      }
 
         /// <summary>
         /// Moves a unit on the game board and redraws to show updated

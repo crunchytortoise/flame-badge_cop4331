@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlameBadge
 {
-    class Sidebar
+    public class Sidebar
     {
         private static int left = 20 * 3 + 3;
         private static int top = 20 / 2;

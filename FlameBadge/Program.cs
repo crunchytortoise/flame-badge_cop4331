@@ -10,14 +10,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 namespace FlameBadge
 {
-    class Program
+    public class Program
     {
         // initialize main game object
         static void Main(string[] args)
         {
-            FlameBadge main = new FlameBadge();
+            Application.EnableVisualStyles(); 
+            Application.Run(new Form1());
         }
     }
 }

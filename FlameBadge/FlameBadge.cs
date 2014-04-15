@@ -9,17 +9,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
 namespace FlameBadge
 {
-    class FlameBadge
+    public class FlameBadge
     {
         public static Boolean hasEnded = false;
         public static Boolean cpuCapture = false;
+        public static char curr_turn;
         public static List<PlayerCharacter> player_units = new List<PlayerCharacter>();
         public static List<EnemyCharacter> cpu_units = new List<EnemyCharacter>();
         public static String save_dir = Config.project_path + @"\\saves\\";
-        
+        public static GameBoard game_board;
         public FlameBadge()
         {
             // Set up saves directory
@@ -44,17 +47,22 @@ namespace FlameBadge
                 loaded_file = save_dir + loaded_file;
 
             // if we loaded we need to know whose turn it was
-            Char curr_turn = '0';
+            curr_turn = '0';
             if (is_loaded)
                 curr_turn = _getTurn(loaded_file);
 
             // Draw the game board.
-            GameBoard game_board = new GameBoard(is_loaded ? loaded_file : null);
+            game_board = new GameBoard(is_loaded ? loaded_file : null);
 
             // Put the pieces on the board.
             PlayerCharacter.placePieces(is_loaded, loaded_file);
             EnemyCharacter.placePieces(is_loaded, loaded_file);
 
+            
+        }
+
+        public void startGame()
+        {
             // mainloop
             while (true)
             {
@@ -111,6 +119,11 @@ namespace FlameBadge
                 }
             }
 
+        }
+    
+        public GameBoard getGameBoard()
+        {
+            return game_board;
         }
 
         private void _endGame()

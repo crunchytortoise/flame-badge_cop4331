@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlameBadge
 {
-    class EnemyCharacter : Character
+    public class EnemyCharacter : Character
     {
         public EnemyCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) {}
 
