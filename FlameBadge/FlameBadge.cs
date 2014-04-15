@@ -61,7 +61,7 @@ namespace FlameBadge
             EnemyCharacter.placePieces(is_loaded, loaded_file);
 
             Application.Run(window = new Form1(this));
-            
+
             // mainloop
             while (true)
             {
@@ -76,6 +76,9 @@ namespace FlameBadge
                         else
                             curr_turn = '0';
                     }
+
+                    //THIS WILL SOON REPLACE THE PLAYER TAKE TURN
+                    //window.takeTurn(player_units[i]);
                     player_units[i].takeTurn();
                     List<Character> victims = GameBoard.getAttackableUnits(player_units[i].xPos, player_units[i].yPos, cpu_units.Cast<Character>().ToList());
                     if (victims.Count > 0)
@@ -125,6 +128,15 @@ namespace FlameBadge
             return game_board;
         }
 
+        public List<PlayerCharacter> getPlayerCharacters()
+        {
+            return player_units;
+        }
+
+        public List<EnemyCharacter> getEnemyCharacters()
+        {
+            return cpu_units;
+        }
         private void _endGame()
         {
             String msg;
