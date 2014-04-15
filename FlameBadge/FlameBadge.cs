@@ -24,7 +24,8 @@ namespace FlameBadge
         public static List<EnemyCharacter> cpu_units = new List<EnemyCharacter>();
         public static String save_dir = Config.project_path + @"\\saves\\";
         public static GameBoard game_board;
-        public static Form1 window;
+        public static PlayerCharacter unitSelected;
+
         public FlameBadge()
         {
             // Set up saves directory
@@ -60,67 +61,88 @@ namespace FlameBadge
             PlayerCharacter.placePieces(is_loaded, loaded_file);
             EnemyCharacter.placePieces(is_loaded, loaded_file);
 
-            Application.Run(window = new Form1(this));
 
-            // mainloop
-            while (true)
+            //// mainloop
+            //while (true)
+            //{
+            //    for (int i = 0; i < player_units.Count; i++)
+            //    {
+            //        // if we loaded a game, skip over everyone until the rightful
+            //        // unit goes
+            //        if (curr_turn != '0')
+            //        {
+            //            if (player_units[i].id != curr_turn)
+            //                continue;
+            //            else
+            //                curr_turn = '0';
+            //        }
+
+            //        //THIS WILL SOON REPLACE THE PLAYER TAKE TURN
+            //        //window.takeTurn(player_units[i]);
+            //        player_units[i].takeTurn();
+            //        List<Character> victims = GameBoard.getAttackableUnits(player_units[i].xPos, player_units[i].yPos, cpu_units.Cast<Character>().ToList());
+            //        if (victims.Count > 0)
+            //        {
+            //            //pass in true to signify player
+            //            GameBoard.attack(player_units[i].id, victims[0].id, true);
+            //            GameBoard.redraw();
+            //            if (cpu_units.Count == 0)
+            //                FlameBadge.hasEnded = true;
+            //        }
+            //        Tuple<Int16, Int16> enemyCastle = GameBoard.getCPUCastle();
+            //        if ((int)enemyCastle.Item2 == (int)player_units[i].xPos && (int)enemyCastle.Item1 == (int)player_units[i].yPos)
+            //        {
+            //            FlameBadge.hasEnded = true;
+            //        }
+            //            if (FlameBadge.hasEnded)
+            //                _endGame();
+            //    }
+
+            //    for (int i = 0; i < cpu_units.Count; i++)
+            //    {
+            //        cpu_units[i].takeTurn();
+            //        List<Character> victims = GameBoard.getAttackableUnits(cpu_units[i].xPos, cpu_units[i].yPos, player_units.Cast<Character>().ToList());
+            //        if (victims.Count > 0)
+            //        {
+            //            //pass in false to signify AI
+            //            GameBoard.attack(cpu_units[i].id, victims[0].id, false);
+            //            GameBoard.redraw();
+            //            if (player_units.Count == 0)
+            //                FlameBadge.hasEnded = true;
+            //        }
+            //        Tuple<Int16, Int16> enemyCastle = GameBoard.getPlayerCastle();
+            //        if ((int)enemyCastle.Item2 == (int)cpu_units[i].xPos && (int)enemyCastle.Item1 == (int)cpu_units[i].yPos)
+            //        {
+            //            FlameBadge.hasEnded = true;
+            //            FlameBadge.cpuCapture = true;
+            //        }
+            //        if (FlameBadge.hasEnded)
+            //            _endGame();
+            //    }
+            //}
+
+        }
+
+        public void selectUnit(int x, int y)
+        {
+            unitSelected = null;
+            Console.Write("Unselected\n");
+            foreach(PlayerCharacter s in player_units)
             {
-                for (int i = 0; i < player_units.Count; i++)
-                {
-                    // if we loaded a game, skip over everyone until the rightful
-                    // unit goes
-                    if (curr_turn != '0')
-                    {
-                        if (player_units[i].id != curr_turn)
-                            continue;
-                        else
-                            curr_turn = '0';
-                    }
-
-                    //THIS WILL SOON REPLACE THE PLAYER TAKE TURN
-                    //window.takeTurn(player_units[i]);
-                    player_units[i].takeTurn();
-                    List<Character> victims = GameBoard.getAttackableUnits(player_units[i].xPos, player_units[i].yPos, cpu_units.Cast<Character>().ToList());
-                    if (victims.Count > 0)
-                    {
-                        //pass in true to signify player
-                        GameBoard.attack(player_units[i].id, victims[0].id, true);
-                        GameBoard.redraw();
-                        if (cpu_units.Count == 0)
-                            FlameBadge.hasEnded = true;
-                    }
-                    Tuple<Int16, Int16> enemyCastle = GameBoard.getCPUCastle();
-                    if ((int)enemyCastle.Item2 == (int)player_units[i].xPos && (int)enemyCastle.Item1 == (int)player_units[i].yPos)
-                    {
-                        FlameBadge.hasEnded = true;
-                    }
-                        if (FlameBadge.hasEnded)
-                            _endGame();
-                }
-
-                for (int i = 0; i < cpu_units.Count; i++)
-                {
-                    cpu_units[i].takeTurn();
-                    List<Character> victims = GameBoard.getAttackableUnits(cpu_units[i].xPos, cpu_units[i].yPos, player_units.Cast<Character>().ToList());
-                    if (victims.Count > 0)
-                    {
-                        //pass in false to signify AI
-                        GameBoard.attack(cpu_units[i].id, victims[0].id, false);
-                        GameBoard.redraw();
-                        if (player_units.Count == 0)
-                            FlameBadge.hasEnded = true;
-                    }
-                    Tuple<Int16, Int16> enemyCastle = GameBoard.getPlayerCastle();
-                    if ((int)enemyCastle.Item2 == (int)cpu_units[i].xPos && (int)enemyCastle.Item1 == (int)cpu_units[i].yPos)
-                    {
-                        FlameBadge.hasEnded = true;
-                        FlameBadge.cpuCapture = true;
-                    }
-                    if (FlameBadge.hasEnded)
-                        _endGame();
-                }
+               if( s.xPos == x && s.yPos == y)
+               {
+                   Console.Write(s.xPos + " " + s.yPos + " " + x + " " + y + "\n");
+                   unitSelected = s;
+                   return;
+               }
             }
+            Console.Write("No unit to select\n");
+        }
 
+        public PlayerCharacter selectUnit()
+        {
+            Console.Write("Unit Returned\n");
+            return unitSelected; 
         }
     
         public GameBoard getGameBoard()
@@ -175,6 +197,32 @@ namespace FlameBadge
                         break;
                 }
             }
+        }
+
+        public void enemyTakeTurn()
+        {
+            for (int i = 0; i < cpu_units.Count; i++)
+            {
+                cpu_units[i].takeTurn();
+                List<Character> victims = GameBoard.getAttackableUnits(cpu_units[i].xPos, cpu_units[i].yPos, player_units.Cast<Character>().ToList());
+                if (victims.Count > 0)
+                {
+                    //pass in false to signify AI
+                    GameBoard.attack(cpu_units[i].id, victims[0].id, false);
+                    GameBoard.redraw();
+                    if (player_units.Count == 0)
+                        FlameBadge.hasEnded = true;
+                }
+                Tuple<Int16, Int16> enemyCastle = GameBoard.getPlayerCastle();
+                if ((int)enemyCastle.Item2 == (int)cpu_units[i].xPos && (int)enemyCastle.Item1 == (int)cpu_units[i].yPos)
+                {
+                    FlameBadge.hasEnded = true;
+                    FlameBadge.cpuCapture = true;
+                }
+                if (FlameBadge.hasEnded)
+                    _endGame();
+            }
+
         }
 
         private String _getSavedGame(DirectoryInfo dir)

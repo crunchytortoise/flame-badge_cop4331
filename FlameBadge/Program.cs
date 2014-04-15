@@ -19,6 +19,7 @@ namespace FlameBadge
         static void Main(string[] args)
         {
             FlameBadge s = new FlameBadge();
+            Application.Run(new Form1(s));
         }
     }
 }

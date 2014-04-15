@@ -34,6 +34,8 @@ namespace FlameBadge
             //textures[4] = Image.FromFile("../Art/soldier");
             //textures[5] = Image.FromFile("../Art/archer");
 
+            panel1.Click += new EventHandler(panel1_Click);
+
             this.game = game;
             Invalidate();
         }
@@ -45,45 +47,13 @@ namespace FlameBadge
 
         private void Form1_Click(Object sender, MouseEventArgs e)
         {
-            Invalidate();
-            Point point = panel1.PointToClient(Cursor.Position);
-            panel1.CreateGraphics().DrawImage(textures[(int)'z'], new Point((point.X / 32) * 32, (point.Y / 32) * 32));
         }
         private void panel1_Click(Object sender, EventArgs e)
         {
-            Invalidate();
             Point point = panel1.PointToClient(Cursor.Position);
-            panel1.CreateGraphics().DrawImage(textures[(int)'z'], new Point((point.X / 32) * 32, (point.Y / 32) * 32));
+            game.selectUnit((point.X / 32), (point.Y / 32));
+            panel1.Invalidate();
         }
-
-        //public override void takeTurn(PlayerCharacter p)
-        //{
-        //    Sidebar.announce(String.Format(@"{0} taking turn...", this.id.ToString()), true);
-        //    Point point = panel1.PointToClient(Cursor.Position);
-        //    panel1.CreateGraphics().DrawImage(textures[(int)'z'], new Point((point.X / 32) * 32, (point.Y / 32) * 32));
-
-        //    KeyPress s = new k
-        //    while (true)
-        //    {
-        //        cmd = Form1.();
-
-        //        if (cmd.KeyChar == 's' || cmd.KeyChar == 'S')
-        //        {
-        //            GameBoard.saveGame(p.id);
-        //            continue;
-        //        }
-
-        //        if (p.makeMove(cmd.KeyChar))
-        //        {
-        //            Invalidate();
-        //            break;
-        //        }
-        //        else
-        //        {
-        //            label1.Text = (String.Format(@"Invalid move, try again {0}.", p.id.ToString()));
-        //        }
-        //    }
-        //}
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -120,6 +90,12 @@ namespace FlameBadge
                 g.DrawImage(textures[(int)'<'], new Point(p.xPos*32, p.yPos*32));
             }
 
+            if(null!=game.selectUnit())
+            {
+                Console.Write("Drawing\n");
+                g.DrawImage(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
+            }
+            
         }
     }
 }
