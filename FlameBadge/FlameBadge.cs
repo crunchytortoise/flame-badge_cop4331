@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FlameBadge
 {
@@ -23,6 +24,7 @@ namespace FlameBadge
         public static List<EnemyCharacter> cpu_units = new List<EnemyCharacter>();
         public static String save_dir = Config.project_path + @"\\saves\\";
         public static GameBoard game_board;
+        public static Form1 window;
         public FlameBadge()
         {
             // Set up saves directory
@@ -58,11 +60,8 @@ namespace FlameBadge
             PlayerCharacter.placePieces(is_loaded, loaded_file);
             EnemyCharacter.placePieces(is_loaded, loaded_file);
 
+            Application.Run(window = new Form1(this));
             
-        }
-
-        public void startGame()
-        {
             // mainloop
             while (true)
             {
