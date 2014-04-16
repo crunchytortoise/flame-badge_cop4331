@@ -31,6 +31,16 @@ namespace FlameBadge
             textures[(int)'*'] = Image.FromFile("Art/castle2.png");
             textures[(int)'<'] = Image.FromFile("Art/enemy.png");
             textures[(int)'>'] = Image.FromFile("Art/player.png");
+            textures[(int)'p'] = Image.FromFile("Art/possibleMove.png");
+
+            //Debug to check that all images are same dimensions
+            //foreach (Image x in textures)
+            //{
+            //    if(x!=null)
+            //    {
+            //        Console.Write(x.PhysicalDimension + "\n");
+            //    }
+            //}
             //textures[4] = Image.FromFile("../Art/soldier");
             //textures[5] = Image.FromFile("../Art/archer");
 
@@ -58,6 +68,8 @@ namespace FlameBadge
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+
+            //Gets gameboard
             try
             {
                 board = game.getGameBoard();
@@ -67,33 +79,43 @@ namespace FlameBadge
             }
             int text = 0;
             
+            //Draws tiles to screen. This should be changed to represent the boards size
             for (int i = 0; i < 20  ; i++)
             {
                 for (int j = 0; j < 20; j++)
                 {
                     if(board!=null && textures[(int)board.getTextureAtLocation(i,j)]!=null)
                         g.DrawImage(textures[(int)board.getTextureAtLocation(i,j)], new Point(j * 32, i * 32));
-                    else
+                    else if(board.getTextureAtLocation(i,j)!='@')
                         g.DrawImage(textures[(int)'%'], new Point(j * 32, i * 32));
                 }
 
                 
             }
-           
+
+            //Draws characters to screen
             foreach(PlayerCharacter p in game.getPlayerCharacters())
             {
                 g.DrawImage(textures[(int)'>'], new Point(p.xPos*32, p.yPos*32));
             }
-           
             foreach(EnemyCharacter p in game.getEnemyCharacters())
             {
                 g.DrawImage(textures[(int)'<'], new Point(p.xPos*32, p.yPos*32));
             }
 
+
+            //Handles drawing for the selected playerCharacter
             if(null!=game.selectUnit())
             {
                 Console.Write("Drawing\n");
                 g.DrawImage(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
+                label1.Text ="Health: " + game.selectUnit().health;
+                
+                foreach(Tuple<int,int> x in game.selectUnit().getPossibleMoves())
+                {
+                    g.DrawImage(textures[(int)'p'], new Point(x.Item1*32, x.Item2*32));
+                };    
+            
             }
             
         }
