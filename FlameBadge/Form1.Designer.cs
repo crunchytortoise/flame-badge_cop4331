@@ -34,16 +34,16 @@
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(53, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(816, 735);
+            this.panel1.Size = new System.Drawing.Size(669, 669);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(840, 9);
+            this.label1.Location = new System.Drawing.Point(826, 57);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 1;
@@ -54,7 +54,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1073, 738);
+            this.ClientSize = new System.Drawing.Size(1081, 738);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";

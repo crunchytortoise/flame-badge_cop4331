@@ -15,38 +15,44 @@ namespace FlameBadge
     {
         public FlameBadge game;
         public static Image[] textures;
-        public static GameBoard board;
+        public static char[,] board;
         public Form1(FlameBadge game)
         {
+
             InitializeComponent();
+
             textures = new Image[10000];
-            textures[(int)'%'] = Image.FromFile("Art/grass.png");
-            textures[(int)'^'] = Image.FromFile("Art/mountain.png");
-            textures[(int)'~'] = Image.FromFile("Art/water.png");
-            textures[(int)'z'] = Image.FromFile("Art/selected.png");
-            textures[(int)'='] = Image.FromFile("Art/bridge.png");
-            textures[(int)'#'] = Image.FromFile("Art/tree.png");
-            textures[(int)'&'] = Image.FromFile("Art/road.png");
-            textures[(int)'+'] = Image.FromFile("Art/castle1.png");
-            textures[(int)'*'] = Image.FromFile("Art/castle2.png");
-            textures[(int)'<'] = Image.FromFile("Art/enemy.png");
-            textures[(int)'>'] = Image.FromFile("Art/player.png");
-            textures[(int)'p'] = Image.FromFile("Art/possibleMove.png");
+            textures[(int)'b'] = Bitmap.FromFile("Art/background.png");
+            textures[(int)'%'] = Bitmap.FromFile("Art/grass.png");
+            textures[(int)'^'] = Bitmap.FromFile("Art/mountain.png");
+            textures[(int)'~'] = Bitmap.FromFile("Art/water.png");
+            textures[(int)'z'] = Bitmap.FromFile("Art/selected.png");
+            textures[(int)'='] = Bitmap.FromFile("Art/bridge.png");
+            textures[(int)'#'] = Bitmap.FromFile("Art/tree.png");
+            textures[(int)'&'] = Bitmap.FromFile("Art/road.png");
+            textures[(int)'+'] = Bitmap.FromFile("Art/castle1.png");
+            textures[(int)'*'] = Bitmap.FromFile("Art/castle2.png");
+            textures[(int)'<'] = Bitmap.FromFile("Art/enemy.png");
+            textures[(int)'>'] = Bitmap.FromFile("Art/player.png");
+            textures[(int)'p'] = Bitmap.FromFile("Art/possibleMove.png");
+            textures[(int)'@'] = Bitmap.FromFile("Art/border.png");
 
             //Debug to check that all images are same dimensions
-            //foreach (Image x in textures)
-            //{
-            //    if(x!=null)
-            //    {
-            //        Console.Write(x.PhysicalDimension + "\n");
-            //    }
-            //}
+            foreach (Image x in textures)
+            {
+                if(x!=null)
+                {
+                    Console.Write(x.VerticalResolution + "\n");
+                    Console.Write(x.HorizontalResolution + "\n");
+                    Console.Write(x.HorizontalResolution + "\n");
+                }
+            }
             //textures[4] = Image.FromFile("../Art/soldier");
             //textures[5] = Image.FromFile("../Art/archer");
 
-            panel1.Click += new EventHandler(panel1_Click);
-
             this.game = game;
+            this.BackgroundImage = textures[(int)'b'];
+            panel1.Click += new EventHandler(panel1_Click);
             Invalidate();
         }
 
@@ -61,10 +67,33 @@ namespace FlameBadge
         private void panel1_Click(Object sender, EventArgs e)
         {
             Point point = panel1.PointToClient(Cursor.Position);
-            game.selectUnit((point.X / 32), (point.Y / 32));
+            int x = (point.X/32);
+            int y = (point.Y/32);
+            if(game.selectUnit()!=null && GameBoard.update(game.selectUnit(),(short)x,(short)y) )
+            {
+                game.unselectUnit();
+                return;
+            }
+            else if(game.selectUnit()!=null && game.selectUnit().attackUnit( x, y, this.game.getEnemyCharacters()))
+            {
+                game.unselectUnit();
+                return;
+            }
+            else  
+                game.selectUnit((point.X / 32), (point.Y / 32));
+
             panel1.Invalidate();
         }
 
+        public Point[] createPoints(int x, int y)
+        {
+            Point[] p = new Point[4];
+            p[0] = new Point(x*32,y*32);
+            p[1] = new Point(x * 32, y * 32 + 32);
+            p[2] = new Point(x*32+32,y*32); 
+            p[3] = new Point(x*32+32,y*32+32); 
+            return p;
+        }
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -72,7 +101,7 @@ namespace FlameBadge
             //Gets gameboard
             try
             {
-                board = game.getGameBoard();
+                board = GameBoard.board;
             }
             catch
             {
@@ -80,14 +109,14 @@ namespace FlameBadge
             int text = 0;
             
             //Draws tiles to screen. This should be changed to represent the boards size
-            for (int i = 0; i < 20  ; i++)
+            for (int i = 0; i < 21  ; i++)
             {
-                for (int j = 0; j < 20; j++)
+                for (int j = 0; j < 21; j++)
                 {
-                    if(board!=null && textures[(int)board.getTextureAtLocation(i,j)]!=null)
-                        g.DrawImage(textures[(int)board.getTextureAtLocation(i,j)], new Point(j * 32, i * 32));
-                    else if(board.getTextureAtLocation(i,j)!='@')
-                        g.DrawImage(textures[(int)'%'], new Point(j * 32, i * 32));
+                    if(board!=null && textures[(int)board[i,j]]!=null)
+                        g.DrawImageUnscaled(textures[(int)board[i,j]], new Point(j * 32, i * 32));
+                    else if(board[i,j]!='@')
+                        g.DrawImageUnscaled(textures[(int)'%'], new Point(j * 32, i * 32));
                 }
 
                 
@@ -96,11 +125,11 @@ namespace FlameBadge
             //Draws characters to screen
             foreach(PlayerCharacter p in game.getPlayerCharacters())
             {
-                g.DrawImage(textures[(int)'>'], new Point(p.xPos*32, p.yPos*32));
+                g.DrawImageUnscaled(textures[(int)'>'], new Point(p.xPos*32, p.yPos*32));
             }
             foreach(EnemyCharacter p in game.getEnemyCharacters())
             {
-                g.DrawImage(textures[(int)'<'], new Point(p.xPos*32, p.yPos*32));
+                g.DrawImageUnscaled(textures[(int)'<'], new Point(p.xPos*32, p.yPos*32));
             }
 
 
@@ -108,15 +137,16 @@ namespace FlameBadge
             if(null!=game.selectUnit())
             {
                 Console.Write("Drawing\n");
-                g.DrawImage(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
+                g.DrawImageUnscaled(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
                 label1.Text ="Health: " + game.selectUnit().health;
                 
                 foreach(Tuple<int,int> x in game.selectUnit().getPossibleMoves())
                 {
-                    g.DrawImage(textures[(int)'p'], new Point(x.Item1*32, x.Item2*32));
+                    g.DrawImageUnscaled(textures[(int)'p'], new Point(x.Item1*32, x.Item2*32));
                 };    
             
             }
+          
             
         }
     }

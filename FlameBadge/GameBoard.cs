@@ -16,7 +16,7 @@ namespace FlameBadge
 {
     public class GameBoard
     {
-        private static Char[,] board { get; set; }
+        public static Char[,] board { get; set; }
         public static Char[,] overlay { get; set; }
         private String game_map { get; set; }
 

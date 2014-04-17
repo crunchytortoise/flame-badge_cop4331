@@ -135,6 +135,30 @@ namespace FlameBadge
             return GameBoard.update(this, (short)(xPos + 1), (short)(yPos + 1));
         }
 
+        public Boolean validMovePerformed(int x, int y)
+        {
+           foreach(Tuple<int,int> s in getPossibleMoves())
+           {
+               Console.Write(s.Item1 + " " + y + " " + s.Item2 + " " + x + "\n");
+                if(s.Item1==x && s.Item2==y)
+                {
+                    return true;
+                }
+           }
+           return false;
+        }
+          public Boolean makeMove( int x, int y )
+        {
+           if(validMovePerformed(x,y))
+           {
+               this.xPos=(short)x;
+               this.yPos=(short)y;
+               GameBoard.update(this, (short)x, (short)y);
+               return true;
+           }
+           return false; 
+        }
+
         public Boolean makeMove(Char cmd)
         {
             switch (cmd)

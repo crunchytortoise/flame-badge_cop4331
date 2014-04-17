@@ -123,6 +123,10 @@ namespace FlameBadge
 
         }
 
+        public void unselectUnit()
+        {
+            unitSelected = null;
+        }
         public void selectUnit(int x, int y)
         {
             unitSelected = null;

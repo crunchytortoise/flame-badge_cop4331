@@ -6,6 +6,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,7 +18,7 @@ namespace FlameBadge
 {
     public class PlayerCharacter : Character
     {
-        public PlayerCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) {}
+        public PlayerCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) { }
 
         public static Tuple<Int16, Int16> getStartingPosition()
         {
@@ -37,7 +40,7 @@ namespace FlameBadge
         {
             if (!is_loaded)
             {
-                Tuple<Int16,Int16> castleCoords = GameBoard.getPlayerCastle();
+                Tuple<Int16, Int16> castleCoords = GameBoard.getPlayerCastle();
                 Int16 j = castleCoords.Item1;
                 Int16 i = castleCoords.Item2;
 
@@ -46,7 +49,7 @@ namespace FlameBadge
                 {
                     if (GameBoard.overlay[i - 1, j] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i-1),(short)j);
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i - 1), (short)j);
                         PlayerCharacter character = new PlayerCharacter('1', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -57,7 +60,7 @@ namespace FlameBadge
                 {
                     if (GameBoard.overlay[i + 1, j] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i+1),(short)j);
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)j);
                         PlayerCharacter character = new PlayerCharacter('2', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -68,7 +71,7 @@ namespace FlameBadge
                 {
                     if (GameBoard.overlay[i, j - 1] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i),(short)(j-1));
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i), (short)(j - 1));
                         PlayerCharacter character = new PlayerCharacter('3', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -77,9 +80,9 @@ namespace FlameBadge
                 }
                 if (j + 1 < GameBoard.overlay.GetLength(1))
                 {
-                    if (GameBoard.overlay[i, j + 1] != '@') 
+                    if (GameBoard.overlay[i, j + 1] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i),(short)(j+1));
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i), (short)(j + 1));
                         PlayerCharacter character = new PlayerCharacter('4', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -92,7 +95,7 @@ namespace FlameBadge
                 {
                     if (GameBoard.overlay[i - 1, j + 1] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i-1),(short)(j+1));
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i - 1), (short)(j + 1));
                         PlayerCharacter character = new PlayerCharacter('5', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -103,7 +106,7 @@ namespace FlameBadge
                 {
                     if (GameBoard.overlay[i + 1, j - 1] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i+1),(short)(j-1));
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)(j - 1));
                         PlayerCharacter character = new PlayerCharacter('6', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -114,7 +117,7 @@ namespace FlameBadge
                 {
                     if (GameBoard.overlay[i - 1, j - 1] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i-1),(short)(j-1));
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i - 1), (short)(j - 1));
                         PlayerCharacter character = new PlayerCharacter('7', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -123,9 +126,9 @@ namespace FlameBadge
                 }
                 if (i + 1 < GameBoard.overlay.GetLength(0) && j + 1 < GameBoard.overlay.GetLength(1))
                 {
-                    if (GameBoard.overlay[i + 1, j + 1] != '@') 
+                    if (GameBoard.overlay[i + 1, j + 1] != '@')
                     {
-                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)(j+1));
+                        Tuple<Int16, Int16> coords = Tuple.Create((short)(i + 1), (short)(j + 1));
                         PlayerCharacter character = new PlayerCharacter('8', coords.Item1, coords.Item2, 10, 1, 1);
                         FlameBadge.player_units.Add(character);
                         GameBoard.update(character, coords.Item1, coords.Item2);
@@ -170,26 +173,46 @@ namespace FlameBadge
             }
         }
 
+
+        public Boolean validAttackPerformed(int x, int y, List<EnemyCharacter> l)
+        {
+            foreach (Character s in l)
+            {
+                if (s.xPos == x && s.yPos == y)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+       
+        public EnemyCharacter grabAttackedUnit(int x, int y, List<EnemyCharacter> l)
+        {
+            foreach (EnemyCharacter s in l)
+            {
+                if (s.xPos == x && s.yPos == y)
+                {
+                    return s;
+                }
+            }
+            return null;
+        }
+
+
+
+        public Boolean attackUnit(int x, int y, List<EnemyCharacter> l)
+        {
+            if (validAttackPerformed(x, y, l))
+            {
+                GameBoard.attack(this.id, grabAttackedUnit(x, y, l).id, true);
+                return true;
+            }
+            return false;
+        }
+
         public override void takeTurn()
         {
-            Sidebar.announce(String.Format(@"{0} taking turn...", this.id.ToString()), true);
-
-            ConsoleKeyInfo cmd;
-            while (true)
-            {
-                cmd = Console.ReadKey();
-
-                if (cmd.KeyChar == 's' || cmd.KeyChar == 'S')
-                {
-                    GameBoard.saveGame(this.id);
-                    continue;
-                }
-
-                if (makeMove(cmd.KeyChar))
-                    break;
-                else
-                    Sidebar.announce(String.Format(@"Invalid move, try again {0}.", this.id.ToString()), true);
-            }
         }
     }
 }
+
