@@ -19,6 +19,8 @@ namespace FlameBadge
         public Pen blackPen = new Pen(Color.Black, 3);
         public Pen redPen = new Pen(Color.Red, 3);
         public Pen bluePen = new Pen(Color.Blue, 3);
+        public SolidBrush redbrush = new SolidBrush(Color.Red);
+
         public Form1(FlameBadge game)
         {
 
@@ -102,7 +104,7 @@ namespace FlameBadge
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            
+            System.Drawing.Drawing2D.FillMode fill = System.Drawing.Drawing2D.FillMode.Winding;
             //Gets gameboard
             try
             {
@@ -131,10 +133,10 @@ namespace FlameBadge
             foreach(PlayerCharacter p in game.getPlayerCharacters())
             {
                 g.DrawImageUnscaled(textures[(int)'>'], new Point(p.xPos*32, p.yPos*32));
-                g.FillPolygon(redPen, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
+                g.FillPolygon(redbrush, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
                                                           new Point( p.xPos*32+32, p.yPos*32),
                                                           new Point( p.xPos*32+29, p.yPos*32+p.health*2),
-                                                          new Point(p.xPos*32+32, p.yPos*32+p.health*2) }, fillMode Winding );
+                                                          new Point(p.xPos*32+32, p.yPos*32+p.health*2) }, fill );
             }
             foreach(EnemyCharacter p in game.getEnemyCharacters())
             {
