@@ -28,6 +28,7 @@ namespace FlameBadge
 
             textures = new Image[10000];
             textures[(int)'b'] = Bitmap.FromFile("Art/background.png");
+            textures[(int)'B'] = Bitmap.FromFile("Art/in_game_button.png");
             textures[(int)'%'] = Bitmap.FromFile("Art/grass.png");
             textures[(int)'^'] = Bitmap.FromFile("Art/mountain.png");
             textures[(int)'~'] = Bitmap.FromFile("Art/water.png");
@@ -40,7 +41,12 @@ namespace FlameBadge
             textures[(int)'<'] = Bitmap.FromFile("Art/enemy.png");
             textures[(int)'>'] = Bitmap.FromFile("Art/player.png");
             textures[(int)'p'] = Bitmap.FromFile("Art/possibleMove.png");
+            textures[(int)'P'] = Bitmap.FromFile("Art/possibleAttack.png");
             textures[(int)'@'] = Bitmap.FromFile("Art/border.png");
+            textures[(int)'S'] = Bitmap.FromFile("Art/mazeEntrance.png");
+            textures[(int)'E'] = Bitmap.FromFile("Art/mazeEntrance.png");
+            textures[(int)'h'] = Bitmap.FromFile("Art/health_tick.png");
+            textures[(int)'H'] = Bitmap.FromFile("Art/health_bar.png");
 
             //Debug to check that all images are same dimensions
             foreach (Image x in textures)
@@ -63,7 +69,7 @@ namespace FlameBadge
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void Form1_Click(Object sender, MouseEventArgs e)
@@ -74,15 +80,15 @@ namespace FlameBadge
             Point point = panel1.PointToClient(Cursor.Position);
             int x = (point.X/32);
             int y = (point.Y/32);
-            if(game.selectUnit()!=null && GameBoard.update(game.selectUnit(),(short)x,(short)y) )
+            if(game.selectUnit()!=null && game.selectUnit().validMovePerformed(x,y) && GameBoard.update(game.selectUnit(),(short)x,(short)y) )
             {
-                game.selectUnit().unitHasTakenAction(true);
+                game.selectUnit().ActionTaken();
                 game.unselectUnit();
                 game.checkForTurnChange();
             }
             else if(game.selectUnit()!=null && game.selectUnit().attackUnit( x, y, this.game.getEnemyCharacters()))
             {
-                game.selectUnit().unitHasTakenAction(true);
+                game.selectUnit().ActionTaken();
                 game.unselectUnit();
                 game.checkForTurnChange();
             }
@@ -101,6 +107,7 @@ namespace FlameBadge
             p[3] = new Point(x*32+32,y*32+32); 
             return p;
         }
+
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -114,7 +121,9 @@ namespace FlameBadge
             {
             }
             int text = 0;
-            
+
+            HealthIcon.CreateGraphics().DrawImage(textures[(int)'h'], new Point(0,0));
+            Healthbar.CreateGraphics().DrawImage(textures[(int)'H'], new Point(0,0));
             //Draws tiles to screen. This should be changed to represent the boards size
             for (int i = 0; i < 21  ; i++)
             {
@@ -129,6 +138,24 @@ namespace FlameBadge
                 
             }
 
+            //Handles drawing for the selected playerCharacter
+            if(null!=game.selectUnit())
+            {
+                Console.Write("Drawing\n");
+                g.DrawImageUnscaled(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
+                HealthNum.Text = game.selectUnit().health.ToString();
+                
+                foreach(Tuple<int,int> x in game.selectUnit().getPossibleMoves())
+                {
+                    g.DrawImageUnscaled(textures[(int)'p'], new Point(x.Item1*32, x.Item2*32));
+                };    
+            
+                foreach(Character x in GameBoard.getAttackableUnits(game.selectUnit().xPos, game.selectUnit().yPos,game.getEnemyCharacters().Cast<Character>().ToList()))
+                {
+                    g.DrawImageUnscaled(textures[(int)'P'], new Point(x.xPos*32, x.yPos*32));
+                };    
+            }
+         
             //Draws characters to screen
             foreach(PlayerCharacter p in game.getPlayerCharacters())
             {
@@ -147,22 +174,6 @@ namespace FlameBadge
                                                           new Point( p.xPos*32+32, p.yPos*32) }, fill );
             }
 
-
-            //Handles drawing for the selected playerCharacter
-            if(null!=game.selectUnit())
-            {
-                Console.Write("Drawing\n");
-                g.DrawImageUnscaled(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
-                label1.Text ="Health: " + game.selectUnit().health;
-                
-                foreach(Tuple<int,int> x in game.selectUnit().getPossibleMoves())
-                {
-                    g.DrawImageUnscaled(textures[(int)'p'], new Point(x.Item1*32, x.Item2*32));
-                };    
-            
-            }
-          
-            
         }
     }
 }

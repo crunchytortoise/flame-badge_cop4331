@@ -133,7 +133,7 @@ namespace FlameBadge
             Console.Write("Unselected\n");
             foreach(PlayerCharacter s in player_units)
             {
-               if( s.xPos == x && s.yPos == y && s.unitHasTakenAction()==false)
+               if( s.xPos == x && s.yPos == y && s.unitHasTakenAction()>0)
                {
                    unitSelected = s;
                    return;
@@ -153,7 +153,7 @@ namespace FlameBadge
         
             foreach(PlayerCharacter x in getPlayerCharacters())
             {
-                if (x.unitHasTakenAction() == false)
+                if (x.unitHasTakenAction() != 0)
                 {
                     return;
                 }
@@ -168,7 +168,7 @@ namespace FlameBadge
         
             foreach(PlayerCharacter x in getPlayerCharacters())
             {
-                x.unitHasTakenAction( false );
+                x.unitHasTakenAction(2);
             }
         }
 
@@ -249,10 +249,11 @@ namespace FlameBadge
                 }
                 if (FlameBadge.hasEnded)
                     _endGame();
-
-                resetActionPoints(); 
+                Form1.ActiveForm.Invalidate();
+                System.Threading.Thread.Sleep(1000);
             }
-
+            
+            resetActionPoints(); 
         }
 
         private String _getSavedGame(DirectoryInfo dir)

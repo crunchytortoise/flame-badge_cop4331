@@ -18,16 +18,20 @@ namespace FlameBadge
 {
     public class PlayerCharacter : Character
     {
-        public Boolean actionPoint;
-        public Boolean unitHasTakenAction()
+        public int actionPoints;
+        public int unitHasTakenAction()
         {
-            return actionPoint;
+            return actionPoints;
         }
-        public void unitHasTakenAction(Boolean x)
+        public void unitHasTakenAction(int x )
         {
-            actionPoint = x; 
+            actionPoints = x;
         }
-        public PlayerCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) { actionPoint = false; }
+        public void ActionTaken()
+        {
+            actionPoints--; 
+        }
+        public PlayerCharacter(Char id, Int16 x, Int16 y, int health, int level, int dpsMod) : base(id, x, y, health, level, dpsMod) { actionPoints = 2; }
 
         public static Tuple<Int16, Int16> getStartingPosition()
         {
