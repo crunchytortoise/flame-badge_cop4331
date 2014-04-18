@@ -16,6 +16,9 @@ namespace FlameBadge
         public FlameBadge game;
         public static Image[] textures;
         public static char[,] board;
+        public Pen blackPen = new Pen(Color.Black, 3);
+        public Pen redPen = new Pen(Color.Red, 3);
+        public Pen bluePen = new Pen(Color.Blue, 3);
         public Form1(FlameBadge game)
         {
 
@@ -71,13 +74,15 @@ namespace FlameBadge
             int y = (point.Y/32);
             if(game.selectUnit()!=null && GameBoard.update(game.selectUnit(),(short)x,(short)y) )
             {
+                game.selectUnit().unitHasTakenAction(true);
                 game.unselectUnit();
-                return;
+                game.checkForTurnChange();
             }
             else if(game.selectUnit()!=null && game.selectUnit().attackUnit( x, y, this.game.getEnemyCharacters()))
             {
+                game.selectUnit().unitHasTakenAction(true);
                 game.unselectUnit();
-                return;
+                game.checkForTurnChange();
             }
             else  
                 game.selectUnit((point.X / 32), (point.Y / 32));
@@ -97,7 +102,7 @@ namespace FlameBadge
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-
+            
             //Gets gameboard
             try
             {
@@ -126,10 +131,18 @@ namespace FlameBadge
             foreach(PlayerCharacter p in game.getPlayerCharacters())
             {
                 g.DrawImageUnscaled(textures[(int)'>'], new Point(p.xPos*32, p.yPos*32));
+                g.FillPolygon(redPen, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
+                                                          new Point( p.xPos*32+32, p.yPos*32),
+                                                          new Point( p.xPos*32+29, p.yPos*32+p.health*2),
+                                                          new Point(p.xPos*32+32, p.yPos*32+p.health*2) }, fillMode Winding );
             }
             foreach(EnemyCharacter p in game.getEnemyCharacters())
             {
                 g.DrawImageUnscaled(textures[(int)'<'], new Point(p.xPos*32, p.yPos*32));
+                g.DrawPolygon(bluePen, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
+                                                          new Point( p.xPos*32+29, p.yPos*32+15),
+                                                          new Point( p.xPos*32+32, p.yPos*32),
+                                                          new Point(p.xPos*32+32, p.yPos*32+15) });
             }
 
 

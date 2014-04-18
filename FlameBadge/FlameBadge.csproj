@@ -132,6 +132,8 @@
     <Content Include="Art\background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Art\health_bar.png" />
+    <Content Include="Art\health_tick.png" />
     <Content Include="Art\mazeEntrance.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -133,9 +133,8 @@ namespace FlameBadge
             Console.Write("Unselected\n");
             foreach(PlayerCharacter s in player_units)
             {
-               if( s.xPos == x && s.yPos == y)
+               if( s.xPos == x && s.yPos == y && s.unitHasTakenAction()==false)
                {
-                   Console.Write(s.xPos + " " + s.yPos + " " + x + " " + y + "\n");
                    unitSelected = s;
                    return;
                }
@@ -148,7 +147,32 @@ namespace FlameBadge
             Console.Write("Unit Returned\n");
             return unitSelected; 
         }
-    
+ 
+        public void checkForTurnChange()
+        {
+        
+            foreach(PlayerCharacter x in getPlayerCharacters())
+            {
+                if (x.unitHasTakenAction() == false)
+                {
+                    return;
+                }
+            }
+
+            enemyTakeTurn();
+
+        }
+
+        public void resetActionPoints()
+        {
+        
+            foreach(PlayerCharacter x in getPlayerCharacters())
+            {
+                x.unitHasTakenAction( false );
+            }
+        }
+
+
         public GameBoard getGameBoard()
         {
             return game_board;
@@ -225,6 +249,8 @@ namespace FlameBadge
                 }
                 if (FlameBadge.hasEnded)
                     _endGame();
+
+                resetActionPoints(); 
             }
 
         }

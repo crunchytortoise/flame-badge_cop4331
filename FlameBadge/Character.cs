@@ -15,6 +15,7 @@ namespace FlameBadge
 {
     public abstract class Character
     {
+        
         public Character(Char id, Int16 x, Int16 y, int health, int level, int dpsMod)
         {
             this.id = id;

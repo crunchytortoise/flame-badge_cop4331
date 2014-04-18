@@ -63,32 +63,32 @@ namespace FlameBadge
          /// <returns> true on success, false if we run into a StreamReader exception</returns>
         private Boolean _parseMap(String map, Int16 map_size)
         {
-            board = new Char[map_size, map_size];
-            Logger.log(@"Initializing map...");
+            //board = new Char[map_size, map_size];
+            //Logger.log(@"Initializing map...");
             
-            try {
-                using (StreamReader f = new StreamReader(map))
-                {
-                    for(int i = 0; i < map_size; i++) 
-                    {
-                        for(int j = 0; j < map_size; j++) 
-                        {
-                            Char curr = (Char)f.Read();
-                            while (Char.IsWhiteSpace(curr))
-                                curr = (Char)f.Read();
+            //try {
+            //    using (StreamReader f = new StreamReader(map))
+            //    {
+            //        for(int i = 0; i < map_size; i++) 
+            //        {
+            //            for(int j = 0; j < map_size; j++) 
+            //            {
+            //                Char curr = (Char)f.Read();
+            //                while (Char.IsWhiteSpace(curr))
+            //                    curr = (Char)f.Read();
                             
-                            board[i,j] = curr;
-                        }
-                    }
-                }
-            }
-            catch (Exception e) {
-                String msg = String.Format(@"The map file at {0} could not be read. Reason: " + e, game_map);
-                Logger.log(msg, "error");
-                return false;
-            }
+            //                board[i,j] = curr;
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception e) {
+            //    String msg = String.Format(@"The map file at {0} could not be read. Reason: " + e, game_map);
+            //    Logger.log(msg, "error");
+            //    return false;
+            //}
 
-            Logger.log(@"Map initialized succesfully!");
+            //Logger.log(@"Map initialized succesfully!");
             return true;
         }
 
