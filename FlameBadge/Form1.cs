@@ -134,17 +134,17 @@ namespace FlameBadge
             {
                 g.DrawImageUnscaled(textures[(int)'>'], new Point(p.xPos*32, p.yPos*32));
                 g.FillPolygon(redbrush, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
-                                                          new Point( p.xPos*32+32, p.yPos*32),
                                                           new Point( p.xPos*32+29, p.yPos*32+p.health*2),
-                                                          new Point(p.xPos*32+32, p.yPos*32+p.health*2) }, fill );
+                                                          new Point(p.xPos*32+32, p.yPos*32+p.health*2),
+                                                          new Point( p.xPos*32+32, p.yPos*32) }, fill );
             }
             foreach(EnemyCharacter p in game.getEnemyCharacters())
             {
                 g.DrawImageUnscaled(textures[(int)'<'], new Point(p.xPos*32, p.yPos*32));
-                g.DrawPolygon(bluePen, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
-                                                          new Point( p.xPos*32+29, p.yPos*32+15),
-                                                          new Point( p.xPos*32+32, p.yPos*32),
-                                                          new Point(p.xPos*32+32, p.yPos*32+15) });
+                g.FillPolygon(redbrush, new Point[]  { new Point( p.xPos*32+29, p.yPos*32),
+                                                          new Point( p.xPos*32+29, p.yPos*32+p.health*2),
+                                                          new Point(p.xPos*32+32, p.yPos*32+p.health*2),
+                                                          new Point( p.xPos*32+32, p.yPos*32) }, fill );
             }
 
 
