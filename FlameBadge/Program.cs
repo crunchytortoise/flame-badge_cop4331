@@ -18,8 +18,7 @@ namespace FlameBadge
         // initialize main game object
         static void Main(string[] args)
         {
-            FlameBadge s = new FlameBadge();
-            Application.Run(new Form1(s));
+            Application.Run(new Form1());
         }
     }
 }

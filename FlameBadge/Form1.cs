@@ -21,9 +21,9 @@ namespace FlameBadge
         public Pen bluePen = new Pen(Color.Blue, 3);
         public SolidBrush redbrush = new SolidBrush(Color.Red);
 
-        public Form1(FlameBadge game)
+        public Form1()
         {
-
+            FlameBadge game = new FlameBadge(this);
             InitializeComponent();
 
             textures = new Image[10000];
@@ -63,6 +63,8 @@ namespace FlameBadge
 
             this.game = game;
             this.BackgroundImage = textures[(int)'b'];
+            Load.CreateGraphics().DrawImage(textures[(int)'B'], new Point(0, 0));
+            Save.CreateGraphics().DrawImage(textures[(int)'B'], new Point(0, 0));
             panel1.Click += new EventHandler(panel1_Click);
             Invalidate();
         }
@@ -122,8 +124,10 @@ namespace FlameBadge
             }
             int text = 0;
 
-            HealthIcon.CreateGraphics().DrawImage(textures[(int)'h'], new Point(0,0));
+            //HealthIcon.CreateGraphics().DrawImage(textures[(int)'h'], new Point(0,0));
             Healthbar.CreateGraphics().DrawImage(textures[(int)'H'], new Point(0,0));
+            Load.CreateGraphics().DrawImage(textures[(int)'B'], new Point(0, 0));
+            Save.CreateGraphics().DrawImage(textures[(int)'B'], new Point(0, 0));
             //Draws tiles to screen. This should be changed to represent the boards size
             for (int i = 0; i < 21  ; i++)
             {

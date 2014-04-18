@@ -25,9 +25,11 @@ namespace FlameBadge
         public static String save_dir = Config.project_path + @"\\saves\\";
         public static GameBoard game_board;
         public static PlayerCharacter unitSelected;
-
-        public FlameBadge()
+        public static Form1 window;
+        public FlameBadge(Form1 w)
         {
+
+            window = w;
             // Set up saves directory
             
             if (!Directory.Exists(save_dir))
@@ -231,6 +233,8 @@ namespace FlameBadge
         {
             for (int i = 0; i < cpu_units.Count; i++)
             {
+                //window.panel1.Invalidate();
+                
                 cpu_units[i].takeTurn();
                 List<Character> victims = GameBoard.getAttackableUnits(cpu_units[i].xPos, cpu_units[i].yPos, player_units.Cast<Character>().ToList());
                 if (victims.Count > 0)
@@ -249,8 +253,8 @@ namespace FlameBadge
                 }
                 if (FlameBadge.hasEnded)
                     _endGame();
-                Form1.ActiveForm.Invalidate();
-                System.Threading.Thread.Sleep(1000);
+
+                //System.Threading.Thread.Sleep(1000);
             }
             
             resetActionPoints(); 
