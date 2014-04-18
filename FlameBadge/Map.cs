@@ -254,7 +254,6 @@ public class Map
     private static void addTrees(char[,] map, int numCopses, int treeMax)
 	{
 		int cnt = 0;
-		if (DEBUG) System.Console.WriteLine("numCopses = " + numCopses + ", treeMax = " + treeMax);
 		
         //outerloop:
         // to break out of nested loop when treeMax is reached
@@ -267,7 +266,6 @@ public class Map
 			int row = rnd.Next(0,ySize) + 1;
 			int col = rnd.Next(0,xSize) + 1;
 			int rad = rnd.Next(0,(ySize < xSize ? ySize : xSize) / copseRadDiv) + 1;
-			if (DEBUG) System.Console.WriteLine("center (" + (col+1) + ", " + (row+1) + "), diameter = " + (rad*2-1));
 			for (int y = -rad; y < rad; y++)
 			{ 
 	            for (int x = -rad; x < rad; x++)

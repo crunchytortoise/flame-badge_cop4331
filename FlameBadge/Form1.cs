@@ -48,18 +48,6 @@ namespace FlameBadge
             textures[(int)'h'] = Bitmap.FromFile("Art/health_tick.png");
             textures[(int)'H'] = Bitmap.FromFile("Art/health_bar.png");
 
-            //Debug to check that all images are same dimensions
-            foreach (Image x in textures)
-            {
-                if(x!=null)
-                {
-                    Console.Write(x.VerticalResolution + "\n");
-                    Console.Write(x.HorizontalResolution + "\n");
-                    Console.Write(x.HorizontalResolution + "\n");
-                }
-            }
-            //textures[4] = Image.FromFile("../Art/soldier");
-            //textures[5] = Image.FromFile("../Art/archer");
 
             this.game = game;
             this.BackgroundImage = textures[(int)'b'];
@@ -145,7 +133,6 @@ namespace FlameBadge
             //Handles drawing for the selected playerCharacter
             if(null!=game.selectUnit())
             {
-                Console.Write("Drawing\n");
                 g.DrawImageUnscaled(textures[(int)'z'], new Point(game.selectUnit().xPos*32, game.selectUnit().yPos*32));
                 HealthNum.Text = game.selectUnit().health.ToString();
                 

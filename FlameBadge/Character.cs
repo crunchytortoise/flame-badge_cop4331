@@ -140,7 +140,6 @@ namespace FlameBadge
         {
            foreach(Tuple<int,int> s in getPossibleMoves())
            {
-               Console.Write(s.Item1 + " " + y + " " + s.Item2 + " " + x + "\n");
                 if(s.Item1==x && s.Item2==y)
                 {
                     return true;

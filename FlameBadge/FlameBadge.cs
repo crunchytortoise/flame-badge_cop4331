@@ -132,7 +132,6 @@ namespace FlameBadge
         public void selectUnit(int x, int y)
         {
             unitSelected = null;
-            Console.Write("Unselected\n");
             foreach(PlayerCharacter s in player_units)
             {
                if( s.xPos == x && s.yPos == y && s.unitHasTakenAction()>0)
@@ -141,12 +140,10 @@ namespace FlameBadge
                    return;
                }
             }
-            Console.Write("No unit to select\n");
         }
 
         public PlayerCharacter selectUnit()
         {
-            Console.Write("Unit Returned\n");
             return unitSelected; 
         }
  
@@ -198,35 +195,28 @@ namespace FlameBadge
             else
                 msg = @"You win! Press any key to quit...";
 
-            Console.Clear();
             Console.WriteLine(msg);
-            Console.ReadKey();
             System.Environment.Exit(0);
         }
 
         private Boolean _offerContinue()
         {
-            System.Console.WriteLine(@"Previous saves detected...");
-            System.Console.WriteLine(@"1. Start New Game");
-            System.Console.WriteLine(@"2. Load Previous Save");
-            System.Console.WriteLine();
-            System.Console.Write(@"Please choose an option and press Enter (1 or 2): ");
-            ConsoleKeyInfo cmd;
-            while (true)
-            {
-                cmd = Console.ReadKey();
+            //ConsoleKeyInfo cmd;
+            //while (true)
+            //{
 
-                switch (cmd.KeyChar)
-                {
-                    case '1':
-                        return false;
-                    case '2':
-                        return true;
-                    default:
-                        System.Console.WriteLine(@"Invalid command, please enter 1 or 2: ");
-                        break;
-                }
-            }
+            //    switch (cmd.KeyChar)
+            //    {
+            //        case '1':
+            //            return false;
+            //        case '2':
+            //            return true;
+            //        default:
+            //            System.Console.WriteLine(@"Invalid command, please enter 1 or 2: ");
+            //            break;
+            //    }
+            //}
+            return true;
         }
 
         public void enemyTakeTurn()
@@ -262,39 +252,31 @@ namespace FlameBadge
 
         private String _getSavedGame(DirectoryInfo dir)
         {
-            System.Console.WriteLine();
-            System.Console.WriteLine(@"Found the following saved games:");
-            for(int i=0; i < dir.GetFiles().Length; i++)
-            {
-                System.Console.WriteLine((i+1).ToString() + @". " + dir.GetFiles()[i].Name);
-            }
-            System.Console.WriteLine();
-            System.Console.WriteLine();
-            System.Console.Write(@"Please choose a file or press '0' to start a new game: ");
+            //for(int i=0; i < dir.GetFiles().Length; i++)
+            //{
+            //}
 
-            ConsoleKeyInfo cmd;
-            while (true)
-            {
-                cmd = Console.ReadKey();
-                Int32 val = (int)Char.GetNumericValue(cmd.KeyChar);
+            //ConsoleKeyInfo cmd;
+            //while (true)
+            //{
+            //    Int32 val = (int)Char.GetNumericValue(cmd.KeyChar);
                 
-                if (val == 0)
-                {
-                    return "";
-                }
-                else if (val > dir.GetFiles().Length + 1)
-                {
-                    System.Console.WriteLine();
-                    System.Console.WriteLine(@"Invalid selection, please choose a save file or press 0 to start a new game: ");
-                    continue;
-                }
+            //    if (val == 0)
+            //    {
+            //        return "";
+            //    }
+            //    else if (val > dir.GetFiles().Length + 1)
+            //    {
+            //        continue;
+            //    }
                
-                else
-                {
-                    return dir.GetFiles()[val - 1].Name;
-                }
+            //    else
+            //    {
+            //        return dir.GetFiles()[val - 1].Name;
+            //    }
 
-            }
+            //}
+            return " "; 
         }
 
         private Char _getTurn(String loaded_file) 

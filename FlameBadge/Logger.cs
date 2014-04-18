@@ -110,7 +110,6 @@ namespace FlameBadge
                 String line;
                 while((line = r.ReadLine()) != null) 
                 {
-                    Console.WriteLine(line);
                 }
             }
         }
