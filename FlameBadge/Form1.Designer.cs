@@ -85,7 +85,7 @@
             this.Controls.Add(this.Load);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "FlameBadge";
             this.ResumeLayout(false);
             this.PerformLayout();
 
